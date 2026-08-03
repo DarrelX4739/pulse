@@ -125,15 +125,20 @@ button:disabled{
 ========================= */
 
 .dashboard{
-    display:flex;
-    justify-content:center;
-    align-items:center;
+
+    min-height:100vh;
+
+    background:#090909;
+
     padding:40px;
+
 }
 
 .dashboard-card{
 
-    width:700px;
+    width:100%;
+
+    min-height:calc(100vh - 80px);
 
     background:#171717;
 
@@ -141,7 +146,7 @@ button:disabled{
 
     border-radius:22px;
 
-    padding:35px;
+    padding:40px;
 
     box-shadow:0 0 35px rgba(255,0,0,.2);
 
