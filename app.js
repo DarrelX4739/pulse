@@ -6,16 +6,33 @@ import {
     onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
+// =====================================
+// CONFIG
+// =====================================
+
 const ALLOWED_UID = "WzbTdt1HZKQPPiROrt413PtHudH3";
 
-// --------------------
+// =====================================
+// ELEMENTS
+// =====================================
+
 // Login Page
-// --------------------
 
 const email = document.getElementById("email");
 const password = document.getElementById("password");
 const loginBtn = document.getElementById("loginBtn");
 const message = document.getElementById("message");
+
+// Dashboard
+
+const logoutBtn = document.getElementById("logoutBtn");
+const timeElement = document.getElementById("time");
+const dateElement = document.getElementById("date");
+const greetingElement = document.getElementById("greeting");
+
+// =====================================
+// LOGIN
+// =====================================
 
 if (loginBtn) {
 
@@ -23,37 +40,56 @@ if (loginBtn) {
 
         message.textContent = "";
 
-        if (email.value.trim() === "" || password.value === "") {
-            message.textContent = "Please enter your email and password.";
+        if (
+            email.value.trim() === "" ||
+            password.value === ""
+        ) {
+
+            message.textContent =
+                "Please enter your email and password.";
+
             return;
+
         }
 
         loginBtn.disabled = true;
+
         loginBtn.textContent = "Signing In...";
 
         try {
 
             const userCredential =
                 await signInWithEmailAndPassword(
+
                     auth,
+
                     email.value.trim(),
+
                     password.value
+
                 );
 
-            if (userCredential.user.uid !== ALLOWED_UID) {
+            if (
+                userCredential.user.uid !==
+                ALLOWED_UID
+            ) {
 
                 await signOut(auth);
 
-                message.textContent = "Access denied.";
+                message.textContent =
+                    "Access denied.";
 
                 loginBtn.disabled = false;
-                loginBtn.textContent = "Sign In";
+
+                loginBtn.textContent =
+                    "Sign In";
 
                 return;
 
             }
 
-            window.location.href = "dashboard.html";
+            window.location.href =
+                "dashboard.html";
 
         }
 
@@ -65,120 +101,169 @@ if (loginBtn) {
         }
 
         loginBtn.disabled = false;
-        loginBtn.textContent = "Sign In";
+
+        loginBtn.textContent =
+            "Sign In";
 
     }
 
-    loginBtn.addEventListener("click", login);
+    loginBtn.addEventListener(
+        "click",
+        login
+    );
 
-    document.addEventListener("keydown", (event) => {
+    document.addEventListener(
+        "keydown",
+        (event) => {
 
-        if (event.key === "Enter") {
+            if (event.key === "Enter") {
 
-            login();
+                login();
+
+            }
 
         }
-
-    });
+    );
 
 }
 
-// --------------------
-// Dashboard
-// --------------------
-
-const logoutBtn = document.getElementById("logoutBtn");
-
-const timeElement = document.getElementById("time");
-
-const dateElement = document.getElementById("date");
+// =====================================
+// LOGOUT
+// =====================================
 
 if (logoutBtn) {
 
-    logoutBtn.addEventListener("click", async () => {
+    logoutBtn.addEventListener(
+        "click",
+        async () => {
 
-        await signOut(auth);
+            await signOut(auth);
 
-        window.location.href = "index.html";
+            window.location.href =
+                "index.html";
 
-    });
+        }
+    );
 
 }
 
-// --------------------
-// Authentication Check
-// --------------------
+// =====================================
+// AUTH CHECK
+// =====================================
 
-onAuthStateChanged(auth, async (user) => {
+onAuthStateChanged(
+    auth,
+    async (user) => {
 
-    const isDashboard =
-        window.location.pathname.includes("dashboard.html");
+        const isDashboard =
+            window.location.pathname.includes(
+                "dashboard.html"
+            );
 
-    const isLogin =
-        window.location.pathname.includes("index.html") ||
-        window.location.pathname.endsWith("/");
+        const isLogin =
+            window.location.pathname.includes(
+                "index.html"
+            ) ||
+            window.location.pathname.endsWith("/");
 
-    if (!user) {
+        if (!user) {
 
-        if (isDashboard) {
+            if (isDashboard) {
 
-            window.location.href = "index.html";
+                window.location.href =
+                    "index.html";
+
+            }
+
+            return;
 
         }
 
-        return;
+        if (
+            user.uid !== ALLOWED_UID
+        ) {
+
+            await signOut(auth);
+
+            return;
+
+        }
+
+        if (isLogin) {
+
+            window.location.href =
+                "dashboard.html";
+
+        }
 
     }
+);
 
-    if (user.uid !== ALLOWED_UID) {
+// =====================================
+// DASHBOARD
+// =====================================
 
-        await signOut(auth);
+// =====================================
+// CLOCK, DATE & GREETING
+// =====================================
 
-        return;
-
-    }
-
-    if (isLogin) {
-
-        window.location.href = "dashboard.html";
-
-    }
-
-});
-
-// --------------------
-// Sydney Clock
-// --------------------
-
-function updateSydneyTime() {
+function updateDashboard() {
 
     if (!timeElement || !dateElement) return;
 
     const now = new Date();
 
-    timeElement.textContent = now.toLocaleTimeString(
-        "en-AU",
-        {
-            timeZone: "Australia/Sydney",
-            hour: "numeric",
-            minute: "2-digit",
-            second: "2-digit"
-        }
-    );
+    // Time
+    timeElement.textContent = now.toLocaleTimeString(undefined, {
+        hour: "numeric",
+        minute: "2-digit",
+        second: "2-digit"
+    });
 
-    dateElement.textContent = now.toLocaleDateString(
-        "en-AU",
-        {
-            timeZone: "Australia/Sydney",
-            weekday: "long",
-            day: "numeric",
-            month: "long",
-            year: "numeric"
+    // Date
+    dateElement.textContent = now.toLocaleDateString(undefined, {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+        year: "numeric"
+    });
+
+    // Greeting
+    if (greetingElement) {
+
+        const hour = now.getHours();
+
+        let greeting = "Hello";
+
+        if (hour < 12) {
+
+            greeting = "Good Morning";
+
         }
-    );
+
+        else if (hour < 18) {
+
+            greeting = "Good Afternoon";
+
+        }
+
+        else {
+
+            greeting = "Good Evening";
+
+        }
+
+        greetingElement.textContent =
+            `${greeting}, Darrel 👋`;
+
+    }
 
 }
 
-updateSydneyTime();
+if (timeElement && dateElement) {
 
-setInterval(updateSydneyTime, 1000);
+    updateDashboard();
+
+    setInterval(updateDashboard, 1000);
+
+}
