@@ -3,74 +3,79 @@
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-<title>Pulse Dashboard</title>
+    <title>Pulse Dashboard</title>
 
-<link
-rel="stylesheet"
-href="style.css">
+    <link rel="stylesheet"
+          href="style.css">
 
 </head>
 
 <body class="dashboard">
 
-<div class="dashboard-card">
+    <div class="dashboard-card">
 
-<div class="top-bar">
+        <div class="top-bar">
 
-<h1>Pulse</h1>
+            <h1>Pulse</h1>
 
-<button id="logoutBtn">
+            <button id="logoutBtn">
+                Log Out
+            </button>
 
-Log Out
+        </div>
 
-</button>
+        <div class="welcome">
 
-</div>
+            <h2 id="greeting">
 
-<div class="welcome">
+                Hello, Darrel 👋
 
-<h2>
+            </h2>
 
-Hi Darrel 👋
+            <p>
 
-</h2>
+                Your personal productivity dashboard.
 
-<p>
+            </p>
 
-Welcome back.
+        </div>
 
-</p>
+        <div class="info-container">
 
-</div>
+                    <div class="info-card">
 
-<div class="info-container">
-<div class="info-card">
+                <h3>Current Time</h3>
 
-    <h3>Current Time</h3>
+                <p id="time">
 
-    <p id="time">Loading...</p>
+                    Loading...
 
-</div>
+                </p>
 
-<div class="info-card">
+            </div>
 
-    <h3>Today's Date</h3>
+            <div class="info-card">
 
-    <p id="date">Loading...</p>
+                <h3>Today's Date</h3>
 
-</div>
+                <p id="date">
 
-</div>
+                    Loading...
 
-</div>
+                </p>
 
-<script type="module" src="app.js"></script>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script type="module" src="app.js"></script>
 
 </body>
 
