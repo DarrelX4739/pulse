@@ -16,7 +16,7 @@ const ALLOWED_UID = "WzbTdt1HZKQPPiROrt413PtHudH3";
 // ELEMENTS
 // =====================================
 
-// Login Page
+// Login
 
 const email = document.getElementById("email");
 const password = document.getElementById("password");
@@ -26,9 +26,118 @@ const message = document.getElementById("message");
 // Dashboard
 
 const logoutBtn = document.getElementById("logoutBtn");
+const greetingElement = document.getElementById("greeting");
+const quoteElement = document.getElementById("quote");
 const timeElement = document.getElementById("time");
 const dateElement = document.getElementById("date");
-const greetingElement = document.getElementById("greeting");
+
+// =====================================
+// QUOTES
+// =====================================
+
+const quotes = [
+
+    "Start before you're ready.",
+
+    "Stay focused.",
+
+    "Progress beats perfection.",
+
+    "Small steps matter.",
+
+    "Keep moving forward.",
+
+    "Finish what you started.",
+
+    "Consistency wins.",
+
+    "Dream. Plan. Do.",
+
+    "Today's effort matters.",
+
+    "Learn something new.",
+
+    "Discipline creates freedom.",
+
+    "Never stop improving.",
+
+    "Be proud today.",
+
+    "Keep building.",
+
+    "Growth takes time.",
+
+    "Stay curious.",
+
+    "Choose progress.",
+
+    "One task first.",
+
+    "Done beats perfect.",
+
+    "Think. Build. Repeat.",
+
+    "Momentum changes everything.",
+
+    "Focus creates results.",
+
+    "Build daily habits.",
+
+    "Keep showing up.",
+
+    "Patience builds success.",
+
+    "Stay hungry.",
+
+    "Work smarter.",
+
+    "Believe yourself.",
+
+    "Trust the process.",
+
+    "Keep learning.",
+
+    "Push forward.",
+
+    "Take the first step.",
+
+    "Every day counts.",
+
+    "One percent better.",
+
+    "Create your future.",
+
+    "Keep improving.",
+
+    "Success takes consistency.",
+
+    "Stay determined.",
+
+    "Choose discipline.",
+
+    "Start now.",
+
+    "Finish strong.",
+
+    "Build momentum.",
+
+    "Be unstoppable.",
+
+    "Make today count.",
+
+    "Keep your promise.",
+
+    "Success loves action.",
+
+    "Stay resilient.",
+
+    "Think bigger.",
+
+    "Stay positive.",
+
+    "Never give up."
+
+];
 
 // =====================================
 // LOGIN
@@ -60,18 +169,13 @@ if (loginBtn) {
 
             const userCredential =
                 await signInWithEmailAndPassword(
-
                     auth,
-
                     email.value.trim(),
-
                     password.value
-
                 );
 
             if (
-                userCredential.user.uid !==
-                ALLOWED_UID
+                userCredential.user.uid !== ALLOWED_UID
             ) {
 
                 await signOut(auth);
@@ -81,15 +185,13 @@ if (loginBtn) {
 
                 loginBtn.disabled = false;
 
-                loginBtn.textContent =
-                    "Sign In";
+                loginBtn.textContent = "Sign In";
 
                 return;
 
             }
 
-            window.location.href =
-                "dashboard.html";
+            window.location.href = "dashboard.html";
 
         }
 
@@ -102,28 +204,21 @@ if (loginBtn) {
 
         loginBtn.disabled = false;
 
-        loginBtn.textContent =
-            "Sign In";
+        loginBtn.textContent = "Sign In";
 
     }
 
-    loginBtn.addEventListener(
-        "click",
-        login
-    );
+    loginBtn.addEventListener("click", login);
 
-    document.addEventListener(
-        "keydown",
-        (event) => {
+    document.addEventListener("keydown", (event) => {
 
-            if (event.key === "Enter") {
+        if (event.key === "Enter") {
 
-                login();
-
-            }
+            login();
 
         }
-    );
+
+    });
 
 }
 
@@ -133,17 +228,13 @@ if (loginBtn) {
 
 if (logoutBtn) {
 
-    logoutBtn.addEventListener(
-        "click",
-        async () => {
+    logoutBtn.addEventListener("click", async () => {
 
-            await signOut(auth);
+        await signOut(auth);
 
-            window.location.href =
-                "index.html";
+        window.location.href = "index.html";
 
-        }
-    );
+    });
 
 }
 
@@ -151,60 +242,45 @@ if (logoutBtn) {
 // AUTH CHECK
 // =====================================
 
-onAuthStateChanged(
-    auth,
-    async (user) => {
+onAuthStateChanged(auth, async (user) => {
 
-        const isDashboard =
-            window.location.pathname.includes(
-                "dashboard.html"
-            );
+    const isDashboard =
+        window.location.pathname.includes("dashboard.html");
 
-        const isLogin =
-            window.location.pathname.includes(
-                "index.html"
-            ) ||
-            window.location.pathname.endsWith("/");
+    const isLogin =
+        window.location.pathname.includes("index.html") ||
+        window.location.pathname.endsWith("/");
 
-        if (!user) {
+    if (!user) {
 
-            if (isDashboard) {
+        if (isDashboard) {
 
-                window.location.href =
-                    "index.html";
-
-            }
-
-            return;
+            window.location.href = "index.html";
 
         }
 
-        if (
-            user.uid !== ALLOWED_UID
-        ) {
-
-            await signOut(auth);
-
-            return;
-
-        }
-
-        if (isLogin) {
-
-            window.location.href =
-                "dashboard.html";
-
-        }
+        return;
 
     }
-);
+
+    if (user.uid !== ALLOWED_UID) {
+
+        await signOut(auth);
+
+        return;
+
+    }
+
+    if (isLogin) {
+
+        window.location.href = "dashboard.html";
+
+    }
+
+});
 
 // =====================================
 // DASHBOARD
-// =====================================
-
-// =====================================
-// CLOCK, DATE & GREETING
 // =====================================
 
 function updateDashboard() {
@@ -213,22 +289,8 @@ function updateDashboard() {
 
     const now = new Date();
 
-    // Time
-    timeElement.textContent = now.toLocaleTimeString(undefined, {
-        hour: "numeric",
-        minute: "2-digit",
-        second: "2-digit"
-    });
-
-    // Date
-    dateElement.textContent = now.toLocaleDateString(undefined, {
-        weekday: "long",
-        day: "numeric",
-        month: "long",
-        year: "numeric"
-    });
-
     // Greeting
+
     if (greetingElement) {
 
         const hour = now.getHours();
@@ -258,7 +320,52 @@ function updateDashboard() {
 
     }
 
+    // Quote of the Day
+
+    if (quoteElement) {
+
+        const dayNumber = Math.floor(
+            now.getTime() / 86400000
+        );
+
+        quoteElement.textContent =
+            quotes[dayNumber % quotes.length];
+
+    }
+
+    // Current Time
+
+    timeElement.textContent =
+        now.toLocaleTimeString(undefined, {
+
+            hour: "numeric",
+
+            minute: "2-digit",
+
+            second: "2-digit"
+
+        });
+
+    // Current Date
+
+    dateElement.textContent =
+        now.toLocaleDateString(undefined, {
+
+            weekday: "long",
+
+            day: "numeric",
+
+            month: "long",
+
+            year: "numeric"
+
+        });
+
 }
+
+// =====================================
+// START DASHBOARD
+// =====================================
 
 if (timeElement && dateElement) {
 
