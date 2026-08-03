@@ -1,7 +1,7 @@
-/* ===========================
+/* ======================================
    Pulse
    Black & Red Theme
-=========================== */
+====================================== */
 
 *{
     margin:0;
@@ -11,214 +11,129 @@
 }
 
 body{
-
     background:#090909;
-
     color:white;
-
-    height:100vh;
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    overflow:hidden;
-
+    min-height:100vh;
 }
 
-/* Background Glow */
+/* =========================
+   LOGIN PAGE
+========================= */
+
+body:not(.dashboard){
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow:hidden;
+}
 
 .background{
-
     position:fixed;
-
     width:700px;
-
     height:700px;
-
     background:radial-gradient(circle,
     rgba(255,0,0,.18) 0%,
     rgba(255,0,0,.07) 35%,
     transparent 70%);
-
     filter:blur(60px);
-
     animation:pulseGlow 6s ease-in-out infinite;
-
 }
-
-/* Login Card */
 
 .login-card{
-
     width:420px;
-
     background:rgba(25,25,25,.88);
-
     border:1px solid rgba(255,0,0,.18);
-
     border-radius:22px;
-
     padding:40px;
-
     backdrop-filter:blur(14px);
-
-    box-shadow:
-        0 0 35px rgba(255,0,0,.18);
-
+    box-shadow:0 0 35px rgba(255,0,0,.18);
     display:flex;
-
     flex-direction:column;
-
     gap:18px;
-
     animation:fadeUp .8s ease;
-
     z-index:2;
-
 }
 
-h1{
-
+.login-card h1{
     font-size:48px;
-
     text-align:center;
-
     color:#ff2b2b;
-
-    letter-spacing:1px;
-
 }
 
 .subtitle{
-
     text-align:center;
-
-    color:#bbbbbb;
-
-    margin-bottom:10px;
-
+    color:#bdbdbd;
 }
 
-/* Inputs */
-
 .input-group{
-
     display:flex;
-
     flex-direction:column;
-
     gap:8px;
-
 }
 
 label{
-
-    color:#dddddd;
-
     font-size:14px;
-
+    color:#ddd;
 }
 
 input{
-
     padding:14px;
-
-    background:#111111;
-
+    background:#111;
     color:white;
-
-    border:2px solid #252525;
-
+    border:2px solid #222;
     border-radius:10px;
-
     font-size:15px;
-
     transition:.25s;
-
 }
 
 input:focus{
-
     outline:none;
-
     border-color:#ff2b2b;
-
-    box-shadow:0 0 15px rgba(255,0,0,.25);
-
+    box-shadow:0 0 12px rgba(255,0,0,.3);
 }
 
-/* Button */
-
 button{
-
-    margin-top:10px;
-
     padding:15px;
-
     border:none;
-
     border-radius:12px;
-
-    cursor:pointer;
-
-    font-size:16px;
-
-    font-weight:bold;
-
     background:#d60000;
-
     color:white;
-
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
     transition:.25s;
-
 }
 
 button:hover{
-
     background:#ff2020;
-
     transform:translateY(-2px);
-
-    box-shadow:0 0 18px rgba(255,0,0,.45);
-
 }
 
 button:disabled{
-
     opacity:.6;
-
     cursor:not-allowed;
-
 }
-
-/* Message */
 
 #message{
-
+    color:#ff6666;
     text-align:center;
-
-    min-height:22px;
-
-    color:#ff5c5c;
-
-    font-size:14px;
-
+    min-height:20px;
 }
 
-/* Success Page */
+/* =========================
+   DASHBOARD
+========================= */
 
 .dashboard{
-
-    background:#090909;
-
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:40px;
 }
 
-.success-card{
+.dashboard-card{
 
-    width:460px;
+    width:700px;
 
     background:#171717;
 
@@ -226,35 +141,87 @@ button:disabled{
 
     border-radius:22px;
 
-    padding:45px;
+    padding:35px;
 
-    text-align:center;
+    box-shadow:0 0 35px rgba(255,0,0,.2);
 
-    box-shadow:0 0 35px rgba(255,0,0,.22);
-
-    animation:fadeUp .8s ease;
+    animation:fadeUp .7s ease;
 
 }
 
-.success-card h1{
+.top-bar{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:40px;
+
+}
+
+.top-bar h1{
 
     color:#ff2b2b;
+
+    font-size:42px;
+
+}
+
+.welcome{
+
+    margin-bottom:35px;
+
+}
+
+.welcome h2{
+
+    font-size:34px;
+
+    margin-bottom:10px;
+
+}
+
+.welcome p{
+
+    color:#bfbfbf;
+
+}
+
+.info-card{
+
+    background:#101010;
+
+    border:1px solid #292929;
+
+    border-radius:14px;
+
+    padding:20px;
 
     margin-bottom:20px;
 
 }
 
-.success-card p{
+.info-card h3{
 
-    color:#dddddd;
+    color:#ff3b3b;
 
-    margin:10px 0;
-
-    font-size:18px;
+    margin-bottom:10px;
 
 }
 
-/* Animations */
+.info-card p{
+
+    font-size:22px;
+
+    color:white;
+
+}
+
+/* =========================
+   Animations
+========================= */
 
 @keyframes fadeUp{
 
@@ -282,15 +249,11 @@ button:disabled{
 
         transform:scale(1);
 
-        opacity:.6;
-
     }
 
     50%{
 
-        transform:scale(1.12);
-
-        opacity:1;
+        transform:scale(1.1);
 
     }
 
@@ -298,25 +261,23 @@ button:disabled{
 
         transform:scale(1);
 
-        opacity:.6;
-
     }
 
 }
 
-/* Mobile */
+/* =========================
+   Mobile
+========================= */
 
-@media(max-width:500px){
+@media(max-width:750px){
 
-    .login-card{
+    .dashboard-card{
 
-        width:92%;
-
-        padding:30px;
+        width:95%;
 
     }
 
-    .success-card{
+    .login-card{
 
         width:92%;
 
