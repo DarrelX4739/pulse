@@ -1,152 +1,136 @@
-// =============================
-// Pulse Login
-// =============================
-
 import { auth } from "./firebase.js";
 
 import {
     signInWithEmailAndPassword,
-    onAuthStateChanged,
-    signOut
+    signOut,
+    onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
-
-// ------------------------------------
-// HTML Elements
-// ------------------------------------
-
-const email = document.getElementById("email");
-const password = document.getElementById("password");
-
-const loginBtn = document.getElementById("loginBtn");
-const message = document.getElementById("message");
-
-// ------------------------------------
-// CHANGE THIS
-// ------------------------------------
 
 const ALLOWED_UID = "WzbTdt1HZKQPPiROrt413PtHudH3";
 
-// ------------------------------------
-// Login
-// ------------------------------------
+// --------------------
+// Login Page
+// --------------------
 
-async function login() {
+const email = document.getElementById("email");
+const password = document.getElementById("password");
+const loginBtn = document.getElementById("loginBtn");
+const message = document.getElementById("message");
 
-    message.textContent = "";
+if (loginBtn) {
 
-    const emailValue = email.value.trim();
-    const passwordValue = password.value;
+    async function login() {
 
-    if (emailValue === "" || passwordValue === "") {
+        message.textContent = "";
 
-        message.textContent = "Please enter your email and password.";
+        if (email.value.trim() === "" || password.value === "") {
+            message.textContent = "Please enter your email and password.";
+            return;
+        }
 
-        return;
+        loginBtn.disabled = true;
+        loginBtn.textContent = "Signing In...";
 
-    }
+        try {
 
-    loginBtn.disabled = true;
-    loginBtn.textContent = "Signing In...";
+            const userCredential =
+                await signInWithEmailAndPassword(
+                    auth,
+                    email.value.trim(),
+                    password.value
+                );
 
-    try {
+            if (userCredential.user.uid !== ALLOWED_UID) {
 
-        const userCredential =
-            await signInWithEmailAndPassword(
-                auth,
-                emailValue,
-                passwordValue
-            );
+                await signOut(auth);
 
-        const user = userCredential.user;
+                message.textContent = "Access denied.";
 
-        // Extra security
-        if (user.uid !== ALLOWED_UID) {
+                loginBtn.disabled = false;
+                loginBtn.textContent = "Sign In";
 
-            await signOut(auth);
+                return;
+
+            }
+
+            window.location.href = "dashboard.html";
+
+        }
+
+        catch {
 
             message.textContent =
-                "Access denied.";
-
-            loginBtn.disabled = false;
-            loginBtn.textContent = "Sign In";
-
-            return;
+                "Incorrect email or password.";
 
         }
 
-        window.location.href = "dashboard.html";
+        loginBtn.disabled = false;
+        loginBtn.textContent = "Sign In";
 
     }
 
-    catch(error){
+    loginBtn.addEventListener("click", login);
 
-        console.error(error);
+    document.addEventListener("keydown", (event) => {
 
-        switch(error.code){
+        if (event.key === "Enter") {
 
-            case "auth/invalid-email":
-                message.textContent =
-                    "Invalid email address.";
-                break;
-
-            case "auth/invalid-credential":
-            case "auth/wrong-password":
-            case "auth/user-not-found":
-                message.textContent =
-                    "Incorrect email or password.";
-                break;
-
-            case "auth/too-many-requests":
-                message.textContent =
-                    "Too many attempts. Please try again later.";
-                break;
-
-            default:
-                message.textContent =
-                    "Unable to sign in.";
+            login();
 
         }
 
-    }
-
-    loginBtn.disabled = false;
-    loginBtn.textContent = "Sign In";
+    });
 
 }
 
-// ------------------------------------
-// Login Button
-// ------------------------------------
+// --------------------
+// Dashboard
+// --------------------
 
-loginBtn.addEventListener("click", login);
+const logoutBtn = document.getElementById("logoutBtn");
 
-// ------------------------------------
-// Press Enter
-// ------------------------------------
+const timeElement = document.getElementById("time");
 
-document.addEventListener("keydown", (event)=>{
+const dateElement = document.getElementById("date");
 
-    if(event.key==="Enter"){
+if (logoutBtn) {
 
-        login();
+    logoutBtn.addEventListener("click", async () => {
 
-    }
+        await signOut(auth);
 
-});
+        window.location.href = "index.html";
 
-// ------------------------------------
-// Already Logged In?
-// ------------------------------------
+    });
 
-onAuthStateChanged(auth, async(user)=>{
+}
 
-    if(!user){
+// --------------------
+// Authentication Check
+// --------------------
+
+onAuthStateChanged(auth, async (user) => {
+
+    const isDashboard =
+        window.location.pathname.includes("dashboard.html");
+
+    const isLogin =
+        window.location.pathname.includes("index.html") ||
+        window.location.pathname.endsWith("/");
+
+    if (!user) {
+
+        if (isDashboard) {
+
+            window.location.href = "index.html";
+
+        }
 
         return;
 
     }
 
-    if(user.uid !== ALLOWED_UID){
+    if (user.uid !== ALLOWED_UID) {
 
         await signOut(auth);
 
@@ -154,6 +138,47 @@ onAuthStateChanged(auth, async(user)=>{
 
     }
 
-    window.location.href = "dashboard.html";
+    if (isLogin) {
+
+        window.location.href = "dashboard.html";
+
+    }
 
 });
+
+// --------------------
+// Sydney Clock
+// --------------------
+
+function updateSydneyTime() {
+
+    if (!timeElement || !dateElement) return;
+
+    const now = new Date();
+
+    timeElement.textContent = now.toLocaleTimeString(
+        "en-AU",
+        {
+            timeZone: "Australia/Sydney",
+            hour: "numeric",
+            minute: "2-digit",
+            second: "2-digit"
+        }
+    );
+
+    dateElement.textContent = now.toLocaleDateString(
+        "en-AU",
+        {
+            timeZone: "Australia/Sydney",
+            weekday: "long",
+            day: "numeric",
+            month: "long",
+            year: "numeric"
+        }
+    );
+
+}
+
+updateSydneyTime();
+
+setInterval(updateSydneyTime, 1000);
