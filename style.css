@@ -21,103 +21,163 @@ body{
 ========================= */
 
 body:not(.dashboard){
+
     display:flex;
     justify-content:center;
     align-items:center;
     overflow:hidden;
+
 }
 
 .background{
+
     position:fixed;
+
     width:700px;
     height:700px;
-    background:radial-gradient(circle,
-    rgba(255,0,0,.18) 0%,
-    rgba(255,0,0,.07) 35%,
-    transparent 70%);
+
+    background:
+        radial-gradient(circle,
+        rgba(255,0,0,.18) 0%,
+        rgba(255,0,0,.07) 35%,
+        transparent 70%);
+
     filter:blur(60px);
+
     animation:pulseGlow 6s ease-in-out infinite;
+
 }
 
 .login-card{
+
     width:420px;
+
     background:rgba(25,25,25,.88);
-    border:1px solid rgba(255,0,0,.18);
+
+    border:1px solid rgba(255,0,0,.2);
+
     border-radius:22px;
+
     padding:40px;
+
     backdrop-filter:blur(14px);
+
     box-shadow:0 0 35px rgba(255,0,0,.18);
+
     display:flex;
+
     flex-direction:column;
+
     gap:18px;
-    animation:fadeUp .8s ease;
-    z-index:2;
+
 }
 
 .login-card h1{
-    font-size:48px;
-    text-align:center;
+
     color:#ff2b2b;
+
+    font-size:48px;
+
+    text-align:center;
+
 }
 
 .subtitle{
+
+    color:#bbbbbb;
+
     text-align:center;
-    color:#bdbdbd;
+
 }
 
 .input-group{
+
     display:flex;
+
     flex-direction:column;
+
     gap:8px;
+
 }
 
 label{
-    font-size:14px;
-    color:#ddd;
+
+    color:#dddddd;
+
 }
 
 input{
+
     padding:14px;
+
     background:#111;
+
     color:white;
+
     border:2px solid #222;
+
     border-radius:10px;
-    font-size:15px;
+
     transition:.25s;
+
 }
 
 input:focus{
+
     outline:none;
+
     border-color:#ff2b2b;
-    box-shadow:0 0 12px rgba(255,0,0,.3);
+
+    box-shadow:0 0 15px rgba(255,0,0,.25);
+
 }
 
 button{
+
     padding:15px;
+
     border:none;
+
     border-radius:12px;
+
     background:#d60000;
+
     color:white;
-    font-size:16px;
-    font-weight:bold;
+
     cursor:pointer;
+
     transition:.25s;
+
+    font-size:16px;
+
+    font-weight:bold;
+
 }
 
 button:hover{
+
     background:#ff2020;
+
     transform:translateY(-2px);
+
 }
 
 button:disabled{
+
     opacity:.6;
+
     cursor:not-allowed;
+
 }
 
 #message{
+
     color:#ff6666;
+
     text-align:center;
+
     min-height:20px;
+
 }
 
 /* =========================
@@ -126,11 +186,13 @@ button:disabled{
 
 .dashboard{
 
-    min-height:100vh;
-
     background:#090909;
 
-    padding:40px;
+    width:100vw;
+
+    min-height:100vh;
+
+    padding:20px;
 
 }
 
@@ -138,7 +200,7 @@ button:disabled{
 
     width:100%;
 
-    min-height:calc(100vh - 80px);
+    min-height:calc(100vh - 40px);
 
     background:#171717;
 
@@ -148,9 +210,9 @@ button:disabled{
 
     padding:40px;
 
-    box-shadow:0 0 35px rgba(255,0,0,.2);
+    display:flex;
 
-    animation:fadeUp .7s ease;
+    flex-direction:column;
 
 }
 
@@ -168,15 +230,15 @@ button:disabled{
 
 .top-bar h1{
 
-    color:#ff2b2b;
-
     font-size:42px;
+
+    color:#ff2b2b;
 
 }
 
 .welcome{
 
-    margin-bottom:35px;
+    margin-bottom:30px;
 
 }
 
@@ -194,17 +256,43 @@ button:disabled{
 
 }
 
+.info-container{
+
+    display:flex;
+
+    gap:20px;
+
+    align-items:stretch;
+
+    flex-wrap:wrap;
+
+}
+
 .info-card{
+
+    flex:1;
+
+    min-width:280px;
+
+    max-width:420px;
 
     background:#101010;
 
-    border:1px solid #292929;
+    border:1px solid #2a2a2a;
 
-    border-radius:14px;
+    border-radius:16px;
 
-    padding:20px;
+    padding:24px;
 
-    margin-bottom:20px;
+    transition:.25s;
+
+}
+
+.info-card:hover{
+
+    border-color:#d60000;
+
+    transform:translateY(-3px);
 
 }
 
@@ -274,17 +362,41 @@ button:disabled{
    Mobile
 ========================= */
 
-@media(max-width:750px){
+@media(max-width:800px){
 
-    .dashboard-card{
+    .dashboard{
 
-        width:95%;
+        padding:10px;
 
     }
 
-    .login-card{
+    .dashboard-card{
 
-        width:92%;
+        min-height:calc(100vh - 20px);
+
+        padding:25px;
+
+    }
+
+    .info-container{
+
+        flex-direction:column;
+
+    }
+
+    .info-card{
+
+        max-width:none;
+
+    }
+
+    .top-bar{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+        gap:20px;
 
     }
 
