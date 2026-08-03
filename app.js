@@ -11,6 +11,7 @@ import {
 // =====================================
 
 const ALLOWED_UID = "WzbTdt1HZKQPPiROrt413PtHudH3";
+const USER_NAME = "Darrel";
 
 // =====================================
 // ELEMENTS
@@ -61,7 +62,7 @@ const quotes = [
 
     "Never stop improving.",
 
-    "If you fell down yesterday, stand up today.",
+    "If you fell yesterday, stand today.",
 
     "Keep building.",
 
@@ -162,7 +163,6 @@ if (loginBtn) {
         }
 
         loginBtn.disabled = true;
-
         loginBtn.textContent = "Signing In...";
 
         try {
@@ -174,17 +174,13 @@ if (loginBtn) {
                     password.value
                 );
 
-            if (
-                userCredential.user.uid !== ALLOWED_UID
-            ) {
+            if (userCredential.user.uid !== ALLOWED_UID) {
 
                 await signOut(auth);
 
-                message.textContent =
-                    "Access denied.";
+                message.textContent = "Access denied.";
 
                 loginBtn.disabled = false;
-
                 loginBtn.textContent = "Sign In";
 
                 return;
@@ -203,7 +199,6 @@ if (loginBtn) {
         }
 
         loginBtn.disabled = false;
-
         loginBtn.textContent = "Sign In";
 
     }
@@ -285,7 +280,11 @@ onAuthStateChanged(auth, async (user) => {
 
 function updateDashboard() {
 
-    if (!timeElement || !dateElement) return;
+    if (!timeElement || !dateElement) {
+
+        return;
+
+    }
 
     const now = new Date();
 
@@ -316,7 +315,7 @@ function updateDashboard() {
         }
 
         greetingElement.textContent =
-            `${greeting}, Darrel 👋`;
+            `${greeting}, ${USER_NAME} 👋`;
 
     }
 
@@ -324,9 +323,13 @@ function updateDashboard() {
 
     if (quoteElement) {
 
-        const dayNumber = Math.floor(
-            now.getTime() / 86400000
-        );
+        const startOfYear =
+            new Date(now.getFullYear(), 0, 0);
+
+        const dayNumber =
+            Math.floor(
+                (now - startOfYear) / 86400000
+            );
 
         quoteElement.textContent =
             quotes[dayNumber % quotes.length];
@@ -336,9 +339,9 @@ function updateDashboard() {
     // Current Time
 
     timeElement.textContent =
-        now.toLocaleTimeString(undefined, {
+        now.toLocaleTimeString([], {
 
-            hour: "numeric",
+            hour: "2-digit",
 
             minute: "2-digit",
 
@@ -349,7 +352,7 @@ function updateDashboard() {
     // Current Date
 
     dateElement.textContent =
-        now.toLocaleDateString(undefined, {
+        now.toLocaleDateString([], {
 
             weekday: "long",
 
