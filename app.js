@@ -37,7 +37,7 @@ const dateElement = document.getElementById("date");
 
 const quotes = [
 
-    "Start before you're ready.",
+    "Obstacles are the cost of greatness.",
 
     "Stay focused.",
 
@@ -61,7 +61,7 @@ const quotes = [
 
     "Never stop improving.",
 
-    "Be proud today.",
+    "If you fell down yesterday, stand up today.",
 
     "Keep building.",
 
@@ -73,7 +73,7 @@ const quotes = [
 
     "One task first.",
 
-    "Done beats perfect.",
+    "He who is brave is free.",
 
     "Think. Build. Repeat.",
 
@@ -91,7 +91,7 @@ const quotes = [
 
     "Work smarter.",
 
-    "Believe yourself.",
+    "I can and I will.",
 
     "Trust the process.",
 
@@ -113,7 +113,7 @@ const quotes = [
 
     "Stay determined.",
 
-    "Choose discipline.",
+    "Pressure makes diamonds.",
 
     "Start now.",
 
