@@ -1,30 +1,49 @@
-/* ======================================
+/* =====================================
    Pulse
-   Black & Red Theme
-====================================== */
+   Created by Darrel
+===================================== */
 
 *{
+
     margin:0;
+
     padding:0;
+
     box-sizing:border-box;
+
     font-family:Arial, Helvetica, sans-serif;
+
+}
+
+html,
+body{
+
+    width:100%;
+
+    height:100%;
+
 }
 
 body{
+
     background:#090909;
+
     color:white;
-    min-height:100vh;
+
 }
 
-/* =========================
-   LOGIN PAGE
-========================= */
+/* ==========================
+   LOGIN
+========================== */
 
 body:not(.dashboard){
 
     display:flex;
+
     justify-content:center;
+
     align-items:center;
+
     overflow:hidden;
 
 }
@@ -33,16 +52,12 @@ body:not(.dashboard){
 
     position:fixed;
 
-    width:700px;
-    height:700px;
+    inset:0;
 
     background:
-        radial-gradient(circle,
-        rgba(255,0,0,.18) 0%,
-        rgba(255,0,0,.07) 35%,
-        transparent 70%);
-
-    filter:blur(60px);
+    radial-gradient(circle at center,
+    rgba(255,0,0,.18),
+    transparent 70%);
 
     animation:pulseGlow 6s ease-in-out infinite;
 
@@ -52,17 +67,13 @@ body:not(.dashboard){
 
     width:420px;
 
-    background:rgba(25,25,25,.88);
+    background:#181818;
 
-    border:1px solid rgba(255,0,0,.2);
+    border:2px solid #d60000;
 
-    border-radius:22px;
+    border-radius:20px;
 
     padding:40px;
-
-    backdrop-filter:blur(14px);
-
-    box-shadow:0 0 35px rgba(255,0,0,.18);
 
     display:flex;
 
@@ -70,23 +81,27 @@ body:not(.dashboard){
 
     gap:18px;
 
+    z-index:2;
+
+    box-shadow:0 0 35px rgba(255,0,0,.2);
+
 }
 
 .login-card h1{
+
+    text-align:center;
 
     color:#ff2b2b;
 
     font-size:48px;
 
-    text-align:center;
-
 }
 
 .subtitle{
 
-    color:#bbbbbb;
-
     text-align:center;
+
+    color:#bfbfbf;
 
 }
 
@@ -102,7 +117,7 @@ body:not(.dashboard){
 
 label{
 
-    color:#dddddd;
+    color:#ddd;
 
 }
 
@@ -110,15 +125,13 @@ input{
 
     padding:14px;
 
-    background:#111;
-
-    color:white;
+    border-radius:10px;
 
     border:2px solid #222;
 
-    border-radius:10px;
+    background:#101010;
 
-    transition:.25s;
+    color:white;
 
 }
 
@@ -127,8 +140,6 @@ input:focus{
     outline:none;
 
     border-color:#ff2b2b;
-
-    box-shadow:0 0 15px rgba(255,0,0,.25);
 
 }
 
@@ -148,51 +159,35 @@ button{
 
     transition:.25s;
 
-    font-size:16px;
-
-    font-weight:bold;
-
 }
 
 button:hover{
 
-    background:#ff2020;
-
-    transform:translateY(-2px);
-
-}
-
-button:disabled{
-
-    opacity:.6;
-
-    cursor:not-allowed;
+    background:#ff2b2b;
 
 }
 
 #message{
 
-    color:#ff6666;
+    min-height:20px;
 
     text-align:center;
 
-    min-height:20px;
+    color:#ff6666;
 
 }
 
-/* =========================
+/* ==========================
    DASHBOARD
-========================= */
+========================== */
 
 .dashboard{
 
-    background:#090909;
-
-    width:100vw;
+    width:100%;
 
     min-height:100vh;
 
-    padding:20px;
+    background:#171717;
 
 }
 
@@ -200,13 +195,7 @@ button:disabled{
 
     width:100%;
 
-    min-height:calc(100vh - 40px);
-
-    background:#171717;
-
-    border:2px solid #d60000;
-
-    border-radius:22px;
+    min-height:100vh;
 
     padding:40px;
 
@@ -224,7 +213,7 @@ button:disabled{
 
     align-items:center;
 
-    margin-bottom:40px;
+    margin-bottom:50px;
 
 }
 
@@ -236,33 +225,65 @@ button:disabled{
 
 }
 
+#logoutBtn{
+
+    width:140px;
+
+    padding:14px;
+
+    background:#d60000;
+
+    border:none;
+
+    border-radius:12px;
+
+    color:white;
+
+    font-size:16px;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+#logoutBtn:hover{
+
+    background:#ff2b2b;
+
+}
+
 .welcome{
 
-    margin-bottom:30px;
+    margin-bottom:35px;
 
 }
 
 .welcome h2{
 
-    font-size:34px;
+    font-size:36px;
 
-    margin-bottom:10px;
+    margin-bottom:8px;
 
 }
 
 .welcome p{
 
-    color:#bfbfbf;
+    color:#bdbdbd;
+
+    font-size:18px;
 
 }
+
+/* ---------- Cards ---------- */
 
 .info-container{
 
     display:flex;
 
-    gap:20px;
+    gap:25px;
 
-    align-items:stretch;
+    align-items:flex-start;
 
     flex-wrap:wrap;
 
@@ -270,17 +291,15 @@ button:disabled{
 
 .info-card{
 
-    flex:1;
+    width:320px;
 
-    min-width:280px;
-
-    max-width:420px;
+    min-height:130px;
 
     background:#101010;
 
-    border:1px solid #2a2a2a;
+    border:2px solid #2b2b2b;
 
-    border-radius:16px;
+    border-radius:18px;
 
     padding:24px;
 
@@ -300,41 +319,21 @@ button:disabled{
 
     color:#ff3b3b;
 
-    margin-bottom:10px;
+    margin-bottom:12px;
+
+    font-size:20px;
 
 }
 
 .info-card p{
 
-    font-size:22px;
+    font-size:26px;
 
-    color:white;
-
-}
-
-/* =========================
-   Animations
-========================= */
-
-@keyframes fadeUp{
-
-    from{
-
-        opacity:0;
-
-        transform:translateY(30px);
-
-    }
-
-    to{
-
-        opacity:1;
-
-        transform:translateY(0);
-
-    }
+    font-weight:bold;
 
 }
+
+/* ---------- Animations ---------- */
 
 @keyframes pulseGlow{
 
@@ -346,7 +345,7 @@ button:disabled{
 
     50%{
 
-        transform:scale(1.1);
+        transform:scale(1.08);
 
     }
 
@@ -358,23 +357,23 @@ button:disabled{
 
 }
 
-/* =========================
-   Mobile
-========================= */
+/* ---------- Mobile ---------- */
 
-@media(max-width:800px){
-
-    .dashboard{
-
-        padding:10px;
-
-    }
+@media (max-width:900px){
 
     .dashboard-card{
 
-        min-height:calc(100vh - 20px);
-
         padding:25px;
+
+    }
+
+    .top-bar{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+        gap:20px;
 
     }
 
@@ -386,17 +385,7 @@ button:disabled{
 
     .info-card{
 
-        max-width:none;
-
-    }
-
-    .top-bar{
-
-        flex-direction:column;
-
-        align-items:flex-start;
-
-        gap:20px;
+        width:100%;
 
     }
 
