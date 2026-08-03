@@ -4,10 +4,9 @@
 <head>
 
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Pulse</title>
+    <title>Pulse Dashboard</title>
 
     <link rel="stylesheet" href="style.css">
 
@@ -15,19 +14,43 @@
 
 <body class="dashboard">
 
-<div class="success-card">
+    <div class="dashboard-card">
 
-    <h1>🎉 Success!</h1>
+        <div class="top-bar">
 
-    <p>You have successfully signed in.</p>
+            <h1>Pulse</h1>
 
-    <p>Welcome to <strong>Pulse</strong>.</p>
+            <button id="logoutBtn">Log Out</button>
 
-    <br>
+        </div>
 
-    <p>This is where your dashboard will go.</p>
+        <div class="welcome">
 
-</div>
+            <h2>Hi Darrel 👋</h2>
+
+            <p>Welcome back.</p>
+
+        </div>
+
+        <div class="info-card">
+
+            <h3>Current Time</h3>
+
+            <p id="time">Loading...</p>
+
+        </div>
+
+        <div class="info-card">
+
+            <h3>Today's Date</h3>
+
+            <p id="date">Loading...</p>
+
+        </div>
+
+    </div>
+
+    <script type="module" src="app.js"></script>
 
 </body>
 
