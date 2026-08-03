@@ -283,7 +283,7 @@ button:hover{
 
     gap:25px;
 
-    align-items:flex-start;
+    align-items:stretch;
 
     flex-wrap:wrap;
 
@@ -291,9 +291,19 @@ button:hover{
 
 .info-card{
 
-    width:320px;
+    flex:1;
 
-    min-height:130px;
+    min-width:300px;
+
+    max-width:400px;
+
+    min-height:150px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
 
     background:#101010;
 
