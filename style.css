@@ -573,3 +573,89 @@ body.light .coming-soon-card {
     }
 
 }
+
+/* Dashboard Today's Tasks */
+
+#todayTasks {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 12px;
+
+    margin-top: 15px;
+
+}
+
+/* Overview Bar */
+
+.overview-bar {
+
+    width: 100%;
+
+    height: 18px;
+
+    display: flex;
+
+    overflow: hidden;
+
+    border-radius: 999px;
+
+    background: #2c2c2c;
+
+    margin-top: 15px;
+
+}
+
+#overviewCompleted {
+
+    background: #22c55e;
+
+    width: 0%;
+
+}
+
+#overviewHigh {
+
+    background: #ef4444;
+
+    width: 0%;
+
+}
+
+#overviewMedium {
+
+    background: #f97316;
+
+    width: 0%;
+
+}
+
+#overviewLow {
+
+    background: #eab308;
+
+    width: 0%;
+
+}
+
+.overview-legend {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    margin-top: 12px;
+
+    font-size: .9rem;
+
+}
+
+#completionPercent {
+
+    color: #22c55e;
+
+    font-weight: bold;
+
+}
