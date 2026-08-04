@@ -1,401 +1,574 @@
-/* =====================================
-   Pulse
-   Created by Darrel
-===================================== */
+/* ==========================================
+   PULSE
+   PART 1
+   RESET • LAYOUT • SIDEBAR • THEMES
+========================================== */
 
-*{
-
-    margin:0;
-
-    padding:0;
-
-    box-sizing:border-box;
-
-    font-family:Arial, Helvetica, sans-serif;
-
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 html,
-body{
+body {
+    width: 100%;
+    min-height: 100%;
+    font-family: Arial, Helvetica, sans-serif;
+}
 
-    width:100%;
+body {
+    display: flex;
+    background: #111111;
+    color: white;
+    transition: 0.25s;
+}
 
-    height:100%;
+/* ==========================================
+   LIGHT MODE
+========================================== */
+
+body.light {
+    background: #f5f7fa;
+    color: #111827;
+}
+
+/* ==========================================
+   SIDEBAR
+========================================== */
+
+.sidebar {
+
+    position: fixed;
+
+    left: 0;
+
+    top: 0;
+
+    width: 260px;
+
+    height: 100vh;
+
+    background: #181818;
+
+    border-right: 2px solid #252525;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: space-between;
+
+    padding: 30px 20px;
 
 }
 
-body{
+body.light .sidebar {
 
-    background:#090909;
+    background: white;
 
-    color:white;
-
-}
-
-/* ==========================
-   LOGIN
-========================== */
-
-body:not(.dashboard){
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    overflow:hidden;
+    border-right: 2px solid #e5e7eb;
 
 }
 
-.background{
+/* ==========================================
+   LOGO
+========================================== */
 
-    position:fixed;
+.logo {
 
-    inset:0;
-
-    background:
-    radial-gradient(circle at center,
-    rgba(255,0,0,.18),
-    transparent 70%);
-
-    animation:pulseGlow 6s ease-in-out infinite;
+    text-align: center;
 
 }
 
-.login-card{
+.logo h1 {
 
-    width:420px;
+    color: #dc2626;
 
-    background:#181818;
+    font-size: 2rem;
 
-    border:2px solid #d60000;
-
-    border-radius:20px;
-
-    padding:40px;
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:18px;
-
-    z-index:2;
-
-    box-shadow:0 0 35px rgba(255,0,0,.2);
+    margin-bottom: 25px;
 
 }
 
-.login-card h1{
+body.light .logo h1 {
 
-    text-align:center;
-
-    color:#ff2b2b;
-
-    font-size:48px;
+    color: #2563eb;
 
 }
 
-.subtitle{
+/* ==========================================
+   NAVIGATION
+========================================== */
 
-    text-align:center;
+.sidebar-nav {
 
-    color:#bfbfbf;
+    display: flex;
 
-}
+    flex-direction: column;
 
-.input-group{
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:8px;
+    gap: 10px;
 
 }
 
-label{
+.nav-link {
 
-    color:#ddd;
+    text-decoration: none;
 
-}
+    color: white;
 
-input{
+    padding: 14px 18px;
 
-    padding:14px;
+    border-radius: 12px;
 
-    border-radius:10px;
+    transition: 0.2s;
 
-    border:2px solid #222;
-
-    background:#101010;
-
-    color:white;
+    font-size: 1rem;
 
 }
 
-input:focus{
+.nav-link:hover {
 
-    outline:none;
-
-    border-color:#ff2b2b;
+    background: #2a2a2a;
 
 }
 
-button{
+.nav-link.active {
 
-    padding:15px;
+    background: #dc2626;
 
-    border:none;
-
-    border-radius:12px;
-
-    background:#d60000;
-
-    color:white;
-
-    cursor:pointer;
-
-    transition:.25s;
+    font-weight: bold;
 
 }
 
-button:hover{
+body.light .nav-link {
 
-    background:#ff2b2b;
-
-}
-
-#message{
-
-    min-height:20px;
-
-    text-align:center;
-
-    color:#ff6666;
+    color: #111827;
 
 }
 
-/* ==========================
+body.light .nav-link:hover {
+
+    background: #edf2ff;
+
+}
+
+body.light .nav-link.active {
+
+    background: #2563eb;
+
+    color: white;
+
+}
+
+/* ==========================================
+   THEME BUTTON
+========================================== */
+
+.theme-button {
+
+    background: #dc2626;
+
+    color: white;
+
+    border: none;
+
+    border-radius: 12px;
+
+    padding: 14px;
+
+    cursor: pointer;
+
+    font-size: 1rem;
+
+    transition: 0.2s;
+
+}
+
+.theme-button:hover {
+
+    transform: translateY(-2px);
+
+}
+
+body.light .theme-button {
+
+    background: #2563eb;
+
+}
+
+/* ==========================================
+   MAIN CONTENT
+========================================== */
+
+.main-content {
+
+    flex: 1;
+
+    margin-left: 260px;
+
+    min-height: 100vh;
+
+    padding: 40px;
+
+}
+
+/* ==========================================
+   HEADINGS
+========================================== */
+
+h1,
+h2,
+h3 {
+
+    font-weight: 700;
+
+}
+
+p {
+
+    line-height: 1.6;
+
+}
+/* ==========================================
+   PULSE
+   PART 2
+   DASHBOARD • LOGIN • RESPONSIVE
+========================================== */
+
+/* ==========================================
    DASHBOARD
-========================== */
+========================================== */
 
-.dashboard{
+.dashboard-card {
 
-    width:100%;
+    width: 100%;
 
-    min-height:100vh;
+    max-width: 1200px;
 
-    background:#171717;
-
-}
-
-.dashboard-card{
-
-    width:100%;
-
-    min-height:100vh;
-
-    padding:40px;
-
-    display:flex;
-
-    flex-direction:column;
+    margin: 0 auto;
 
 }
 
-.top-bar{
+.top-bar {
 
-    display:flex;
+    display: flex;
 
-    justify-content:space-between;
+    justify-content: space-between;
 
-    align-items:center;
+    align-items: center;
 
-    margin-bottom:50px;
-
-}
-
-.top-bar h1{
-
-    font-size:42px;
-
-    color:#ff2b2b;
+    margin-bottom: 35px;
 
 }
 
-#logoutBtn{
+.top-bar h1 {
 
-    width:140px;
-
-    padding:14px;
-
-    background:#d60000;
-
-    border:none;
-
-    border-radius:12px;
-
-    color:white;
-
-    font-size:16px;
-
-    cursor:pointer;
-
-    transition:.25s;
+    font-size: 2.2rem;
 
 }
 
-#logoutBtn:hover{
+#logoutBtn {
 
-    background:#ff2b2b;
+    background: #dc2626;
 
-}
+    color: white;
 
-.welcome{
+    border: none;
 
-    margin-bottom:35px;
+    border-radius: 12px;
 
-}
+    padding: 12px 22px;
 
-.welcome h2{
+    cursor: pointer;
 
-    font-size:36px;
+    font-size: 1rem;
 
-    margin-bottom:8px;
-
-}
-
-.welcome p{
-
-    color:#bdbdbd;
-
-    font-size:18px;
+    transition: 0.2s;
 
 }
 
-/* ---------- Cards ---------- */
+#logoutBtn:hover {
 
-.info-container{
-
-    display:flex;
-
-    gap:25px;
-
-    align-items:stretch;
-
-    flex-wrap:wrap;
+    transform: translateY(-2px);
 
 }
 
-.info-card{
+body.light #logoutBtn {
 
-    flex:1;
-
-    min-width:300px;
-
-    max-width:400px;
-
-    min-height:150px;
-
-    display:flex;
-
-    flex-direction:column;
-
-    justify-content:center;
-
-    background:#101010;
-
-    border:2px solid #2b2b2b;
-
-    border-radius:18px;
-
-    padding:24px;
-
-    transition:.25s;
+    background: #2563eb;
 
 }
 
-.info-card:hover{
+/* ==========================================
+   WELCOME
+========================================== */
 
-    border-color:#d60000;
+.welcome {
 
-    transform:translateY(-3px);
-
-}
-
-.info-card h3{
-
-    color:#ff3b3b;
-
-    margin-bottom:12px;
-
-    font-size:20px;
+    margin-bottom: 35px;
 
 }
 
-.info-card p{
+.welcome h2 {
 
-    font-size:26px;
+    font-size: 2rem;
 
-    font-weight:bold;
+    margin-bottom: 10px;
 
 }
 
-/* ---------- Animations ---------- */
+.welcome p {
 
-@keyframes pulseGlow{
+    font-size: 1.1rem;
 
-    0%{
+    opacity: 0.8;
 
-        transform:scale(1);
+}
+
+/* ==========================================
+   INFO CARDS
+========================================== */
+
+.info-container {
+
+    display: flex;
+
+    gap: 25px;
+
+    flex-wrap: wrap;
+
+}
+
+.info-card {
+
+    flex: 1;
+
+    min-width: 280px;
+
+    background: #1d1d1d;
+
+    border-radius: 18px;
+
+    padding: 30px;
+
+    border: 1px solid #2a2a2a;
+
+}
+
+body.light .info-card {
+
+    background: white;
+
+    border: 1px solid #d1d5db;
+
+}
+
+.info-card h3 {
+
+    margin-bottom: 15px;
+
+    font-size: 1.2rem;
+
+}
+
+.info-card p {
+
+    font-size: 1.7rem;
+
+    font-weight: bold;
+
+}
+
+/* ==========================================
+   LOGIN PAGE
+========================================== */
+
+.login-container {
+
+    width: 100%;
+
+    max-width: 420px;
+
+    margin: auto;
+
+    padding: 40px;
+
+    background: #1d1d1d;
+
+    border-radius: 18px;
+
+}
+
+body.light .login-container {
+
+    background: white;
+
+}
+
+.login-container h1 {
+
+    text-align: center;
+
+    margin-bottom: 25px;
+
+}
+
+.login-container input {
+
+    width: 100%;
+
+    padding: 14px;
+
+    margin-bottom: 15px;
+
+    border-radius: 10px;
+
+    border: 1px solid #444;
+
+    background: #252525;
+
+    color: white;
+
+}
+
+body.light .login-container input {
+
+    background: white;
+
+    color: black;
+
+    border: 1px solid #d1d5db;
+
+}
+
+.login-container button {
+
+    width: 100%;
+
+    padding: 14px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background: #dc2626;
+
+    color: white;
+
+    font-size: 1rem;
+
+    cursor: pointer;
+
+}
+
+body.light .login-container button {
+
+    background: #2563eb;
+
+}
+
+#message {
+
+    margin-top: 15px;
+
+    text-align: center;
+
+    color: #ef4444;
+
+}
+
+/* ==========================================
+   COMING SOON PAGES
+========================================== */
+
+.coming-soon-card {
+
+    background: #1d1d1d;
+
+    border-radius: 18px;
+
+    padding: 60px;
+
+    text-align: center;
+
+    max-width: 700px;
+
+    margin: 80px auto;
+
+}
+
+body.light .coming-soon-card {
+
+    background: white;
+
+}
+
+.coming-soon-card h1 {
+
+    font-size: 2.5rem;
+
+    margin-bottom: 20px;
+
+}
+
+.coming-soon-card p {
+
+    font-size: 1.2rem;
+
+    opacity: 0.8;
+
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media (max-width: 900px) {
+
+    .sidebar {
+
+        width: 220px;
 
     }
 
-    50%{
+    .main-content {
 
-        transform:scale(1.08);
+        margin-left: 220px;
 
-    }
-
-    100%{
-
-        transform:scale(1);
+        padding: 25px;
 
     }
 
 }
 
-/* ---------- Mobile ---------- */
+@media (max-width: 700px) {
 
-@media (max-width:900px){
+    .sidebar {
 
-    .dashboard-card{
+        position: relative;
 
-        padding:25px;
+        width: 100%;
 
-    }
-
-    .top-bar{
-
-        flex-direction:column;
-
-        align-items:flex-start;
-
-        gap:20px;
+        height: auto;
 
     }
 
-    .info-container{
+    body {
 
-        flex-direction:column;
+        flex-direction: column;
 
     }
 
-    .info-card{
+    .main-content {
 
-        width:100%;
+        margin-left: 0;
+
+    }
+
+    .info-container {
+
+        flex-direction: column;
 
     }
 
