@@ -7,6 +7,97 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
 // =====================================
+// LOAD SIDEBAR
+// =====================================
+
+async function loadSidebar() {
+
+    const sidebarContainer = document.getElementById("sidebar");
+
+    if (!sidebarContainer) return;
+
+    try {
+
+        const response = await fetch("sidebar.html");
+
+        sidebarContainer.innerHTML = await response.text();
+
+        setupSidebar();
+
+    }
+
+    catch (error) {
+
+        console.error("Unable to load sidebar:", error);
+
+    }
+
+}
+
+function setupSidebar() {
+
+    // Highlight current page
+
+    const page =
+        window.location.pathname
+            .split("/")
+            .pop()
+            .replace(".html", "");
+
+    document.querySelectorAll(".nav-link").forEach(link => {
+
+        if (link.dataset.page === page) {
+
+            link.classList.add("active");
+
+        }
+
+    });
+
+    // Theme toggle
+
+    const themeToggle =
+        document.getElementById("themeToggle");
+
+    if (!themeToggle) return;
+
+    const savedTheme =
+        localStorage.getItem("theme") || "dark";
+
+    document.body.classList.toggle(
+        "light",
+        savedTheme === "light"
+    );
+
+    themeToggle.textContent =
+        savedTheme === "light"
+            ? "☀️ Light Mode"
+            : "🌙 Dark Mode";
+
+    themeToggle.addEventListener("click", () => {
+
+        document.body.classList.toggle("light");
+
+        const light =
+            document.body.classList.contains("light");
+
+        localStorage.setItem(
+            "theme",
+            light ? "light" : "dark"
+        );
+
+        themeToggle.textContent =
+            light
+                ? "☀️ Light Mode"
+                : "🌙 Dark Mode";
+
+    });
+
+}
+
+loadSidebar();
+
+// =====================================
 // CONFIG
 // =====================================
 
