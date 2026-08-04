@@ -468,3 +468,5 @@ if (timeElement && dateElement) {
     setInterval(updateDashboard, 1000);
 
 }
+
+loadSidebar();
