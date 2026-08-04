@@ -4,61 +4,54 @@
 <head>
 
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Pulse</title>
+    <title>Pulse Login</title>
 
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="login.css">
 
 </head>
 
 <body>
 
-<div class="background"></div>
+    <div class="login-card">
 
-<div class="login-card">
+        <div class="login-logo">
 
-    <h1>Pulse</h1>
+            <h1>Pulse</h1>
 
-    <p class="subtitle">
-        Sign in to continue
-    </p>
+            <p>Your personal productivity hub.</p>
 
-    <div class="input-group">
-
-        <label>Email</label>
+        </div>
 
         <input
             type="email"
             id="email"
-            placeholder="Enter your email"
-        >
-
-    </div>
-
-    <div class="input-group">
-
-        <label>Password</label>
+            placeholder="Email">
 
         <input
             type="password"
             id="password"
-            placeholder="Enter your password"
-        >
+            placeholder="Password">
+
+        <button id="loginBtn">
+
+            Sign In
+
+        </button>
+
+        <p id="message"></p>
+
+        <div class="login-footer">
+
+            <p>Pulse © 2026</p>
+
+        </div>
 
     </div>
 
-    <button id="loginBtn">
-
-        Sign In
-
-    </button>
-
-    <p id="message"></p>
-
-</div>
-
-<script type="module" src="app.js"></script>
+    <script type="module" src="app.js"></script>
 
 </body>
 
