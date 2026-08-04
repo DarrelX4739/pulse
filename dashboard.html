@@ -5,74 +5,73 @@
 
     <meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Pulse Dashboard</title>
 
-    <link
-        rel="stylesheet"
-        href="style.css">
+    <link rel="stylesheet" href="style.css">
 
 </head>
 
 <body class="dashboard">
 
-    <div class="dashboard-card">
+    <div id="sidebar"></div>
 
-        <div class="top-bar">
+    <main class="main-content">
 
-            <h1>Pulse</h1>
+        <div class="dashboard-card">
 
-            <button id="logoutBtn">
-                Log Out
-            </button>
+            <div class="top-bar">
 
-        </div>
+                <h1>Pulse</h1>
 
-        <div class="welcome">
+                <button id="logoutBtn">
+                    Log Out
+                </button>
 
-            <h2 id="greeting">
-                Hello, Darrel 👋
-            </h2>
+            </div>
 
-            <p id="quote">
-                Loading today's quote...
-            </p>
+            <div class="welcome">
 
-        </div>
+                <h2 id="greeting">
+                    Hello, Darrel 👋
+                </h2>
 
-        <div class="info-container">
-
-            <div class="info-card">
-
-                <h3>Current Time</h3>
-
-                <p id="time">
-                    Loading...
+                <p id="quote">
+                    Loading today's quote...
                 </p>
 
             </div>
 
-            <div class="info-card">
+            <div class="info-container">
 
-                <h3>Today's Date</h3>
+                <div class="info-card">
 
-                <p id="date">
-                    Loading...
-                </p>
+                    <h3>Current Time</h3>
+
+                    <p id="time">
+                        Loading...
+                    </p>
+
+                </div>
+
+                <div class="info-card">
+
+                    <h3>Today's Date</h3>
+
+                    <p id="date">
+                        Loading...
+                    </p>
+
+                </div>
 
             </div>
 
         </div>
 
-    </div>
+    </main>
 
-    <script
-        type="module"
-        src="app.js">
-    </script>
+    <script type="module" src="app.js"></script>
 
 </body>
 
