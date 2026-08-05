@@ -1,1 +1,105 @@
+/* ==========================================
+   CLOCK PAGE
+========================================== */
 
+.clock-page{
+
+    max-width:1200px;
+
+    margin:auto;
+
+}
+
+.clock-tabs{
+
+    display:flex;
+
+    gap:16px;
+
+    flex-wrap:wrap;
+
+    margin:35px 0;
+
+}
+
+.clock-tab{
+
+    background:#1d1d1d;
+
+    color:white;
+
+    border:1px solid #333;
+
+    border-radius:14px;
+
+    padding:14px 22px;
+
+    cursor:pointer;
+
+    font-size:1rem;
+
+    transition:.2s;
+
+}
+
+.clock-tab:hover{
+
+    transform:translateY(-2px);
+
+}
+
+.clock-tab.active{
+
+    background:#dc2626;
+
+}
+
+body.light .clock-tab{
+
+    background:white;
+
+    color:#111827;
+
+    border:1px solid #d1d5db;
+
+}
+
+body.light .clock-tab.active{
+
+    background:#2563eb;
+
+    color:white;
+
+}
+
+.clock-panel{
+
+    display:none;
+
+}
+
+.clock-panel.active{
+
+    display:block;
+
+}
+
+.clock-card{
+
+    background:#1d1d1d;
+
+    border:1px solid #2d2d2d;
+
+    border-radius:22px;
+
+    padding:40px;
+
+}
+
+body.light .clock-card{
+
+    background:white;
+
+    border-color:#dddddd;
+
+}
