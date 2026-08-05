@@ -7,12 +7,16 @@ import {
     where,
     orderBy,
     onSnapshot,
-    serverTimestamp
+    serverTimestamp,
+    updateDoc,
+    deleteDoc,
+    doc
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
 import {
     onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
 
 // ======================
 // Elements
@@ -30,12 +34,15 @@ const saveTask = document.getElementById("saveTask");
 const cancelTask = document.getElementById("cancelTask");
 
 const taskList = document.getElementById("taskList");
+const completedTaskList = document.getElementById("completedTaskList");
 
 const totalTasks = document.getElementById("totalTasks");
 const completedTasks = document.getElementById("completedTasks");
 const remainingTasks = document.getElementById("remainingTasks");
 
+
 let currentUser = null;
+
 
 // ======================
 // Modal
@@ -47,6 +54,7 @@ newTaskBtn.addEventListener("click", () => {
 
 });
 
+
 cancelTask.addEventListener("click", () => {
 
     taskModal.style.display = "none";
@@ -55,7 +63,8 @@ cancelTask.addEventListener("click", () => {
 
 });
 
-function clearInputs() {
+
+function clearInputs(){
 
     taskTitle.value = "";
     taskDescription.value = "";
@@ -64,13 +73,15 @@ function clearInputs() {
 
 }
 
+
+
 // ======================
 // Authentication
 // ======================
 
-onAuthStateChanged(auth, (user) => {
+onAuthStateChanged(auth, (user)=>{
 
-    if (!user) return;
+    if(!user) return;
 
     currentUser = user;
 
@@ -78,15 +89,19 @@ onAuthStateChanged(auth, (user) => {
 
 });
 
+
+
 // ======================
-// Save Task
+// Add Task
 // ======================
 
-saveTask.addEventListener("click", async () => {
+saveTask.addEventListener("click", async()=>{
 
-    if (!currentUser) return;
 
-    if (taskTitle.value.trim() === "") {
+    if(!currentUser) return;
+
+
+    if(taskTitle.value.trim() === ""){
 
         alert("Please enter a task title.");
 
@@ -94,7 +109,9 @@ saveTask.addEventListener("click", async () => {
 
     }
 
-    await addDoc(collection(db, "tasks"), {
+
+    await addDoc(collection(db,"tasks"),{
+
 
         owner: currentUser.uid,
 
@@ -106,134 +123,362 @@ saveTask.addEventListener("click", async () => {
 
         dueDate: taskDueDate.value,
 
-        completed: false,
+        completed:false,
 
-        created: serverTimestamp()
+        created:serverTimestamp()
+
 
     });
 
-    taskModal.style.display = "none";
+
+    taskModal.style.display="none";
 
     clearInputs();
 
+
 });
 
+
+
 // ======================
-// Live Tasks
+// Listen Tasks
 // ======================
 
-function listenForTasks() {
+function listenForTasks(){
+
 
     const q = query(
 
-        collection(db, "tasks"),
+        collection(db,"tasks"),
 
-        where("owner", "==", currentUser.uid),
+        where("owner","==",currentUser.uid),
 
-        orderBy("created", "asc")
+        orderBy("created","asc")
 
     );
 
-    onSnapshot(q, (snapshot) => {
 
-        const tasks = [];
+    onSnapshot(q,(snapshot)=>{
 
-        snapshot.forEach(doc => {
+
+        const tasks=[];
+
+
+        snapshot.forEach((item)=>{
+
 
             tasks.push({
 
-                id: doc.id,
+                id:item.id,
 
-                ...doc.data()
+                ...item.data()
 
             });
 
+
         });
+
+
 
         renderTasks(tasks);
 
+
     });
 
+
 }
+
+
+
+
+// ======================
+// Complete Task
+// ======================
+
+async function toggleComplete(id,currentStatus){
+
+
+    const taskRef = doc(db,"tasks",id);
+
+
+    await updateDoc(taskRef,{
+
+        completed:!currentStatus
+
+    });
+
+
+}
+
+
+
+// ======================
+// Delete Task
+// ======================
+
+async function deleteTask(id){
+
+
+    const taskRef = doc(db,"tasks",id);
+
+
+    await deleteDoc(taskRef);
+
+
+}
+
+
+
 
 // ======================
 // Render
 // ======================
 
-function renderTasks(tasks) {
+function renderTasks(tasks){
 
-    taskList.innerHTML = "";
+
+    taskList.innerHTML="";
+    completedTaskList.innerHTML="";
+
 
     totalTasks.textContent = tasks.length;
 
+
     completedTasks.textContent =
-        tasks.filter(t => t.completed).length;
+        tasks.filter(t=>t.completed).length;
+
 
     remainingTasks.textContent =
-        tasks.filter(t => !t.completed).length;
+        tasks.filter(t=>!t.completed).length;
 
-    if (tasks.length === 0) {
 
-        taskList.innerHTML = `
-            <p class="empty-message">
-                🎉 No tasks yet.
-            </p>
-        `;
 
-        return;
+    const priorityOrder={
 
-    }
+        high:0,
 
-    const priorityOrder = {
+        medium:1,
 
-        high: 0,
-
-        medium: 1,
-
-        low: 2
+        low:2
 
     };
 
-    tasks.sort((a, b) => {
 
-        if (priorityOrder[a.priority] !== priorityOrder[b.priority]) {
 
-            return priorityOrder[a.priority] -
-                   priorityOrder[b.priority];
+    tasks.sort((a,b)=>{
 
-        }
 
-        return 0;
+        return priorityOrder[a.priority] -
+               priorityOrder[b.priority];
+
 
     });
 
-    tasks.forEach(task => {
 
-        const colour = {
 
-            high: "🔴",
+    const incomplete =
+        tasks.filter(task=>!task.completed);
 
-            medium: "🟠",
 
-            low: "🟡"
+    const completed =
+        tasks.filter(task=>task.completed);
 
-        };
 
-        taskList.innerHTML += `
 
-        <div class="task-card">
 
-            <h3>${colour[task.priority]} ${task.title}</h3>
+    if(incomplete.length===0){
 
-            <p>${task.description || "No description"}</p>
+        taskList.innerHTML=`
 
-            <small>Due: ${task.dueDate || "No due date"}</small>
-
-        </div>
+        <p class="empty-message">
+            🎉 No active tasks.
+        </p>
 
         `;
 
+    }
+
+
+
+    incomplete.forEach(task=>{
+
+
+        taskList.innerHTML += createTaskCard(task);
+
+
     });
+
+
+
+
+    if(completed.length===0){
+
+
+        completedTaskList.innerHTML=`
+
+        <p class="empty-message">
+            No completed tasks.
+        </p>
+
+        `;
+
+
+    }
+
+
+
+    completed.forEach(task=>{
+
+
+        completedTaskList.innerHTML += createTaskCard(task);
+
+
+    });
+
+
+
+    addButtonEvents();
+
 
 }
 
+
+
+
+// ======================
+// Task Card
+// ======================
+
+function createTaskCard(task){
+
+
+    const colour={
+
+        high:"🔴",
+
+        medium:"🟠",
+
+        low:"🟡"
+
+    };
+
+
+
+    return `
+
+
+    <div class="task-card ${task.priority} ${task.completed ? "completed":""}">
+
+
+        <div class="task-main">
+
+
+            <h3>
+                ${colour[task.priority]} ${task.title}
+            </h3>
+
+
+            <p>
+                ${task.description || "No description"}
+            </p>
+
+
+            <small class="task-date">
+
+                Due: ${task.dueDate || "No due date"}
+
+            </small>
+
+
+        </div>
+
+
+
+        <div class="task-actions">
+
+
+            <button 
+            class="complete-btn"
+            data-id="${task.id}"
+            data-completed="${task.completed}">
+
+                ✓
+
+            </button>
+
+
+            <button
+            class="delete-btn"
+            data-id="${task.id}">
+
+                🗑
+
+            </button>
+
+
+        </div>
+
+
+
+    </div>
+
+
+    `;
+
+
+}
+
+
+
+
+// ======================
+// Button Events
+// ======================
+
+function addButtonEvents(){
+
+
+    document.querySelectorAll(".complete-btn")
+    .forEach(button=>{
+
+
+        button.addEventListener("click",()=>{
+
+
+            toggleComplete(
+
+                button.dataset.id,
+
+                button.dataset.completed==="true"
+
+            );
+
+
+        });
+
+
+    });
+
+
+
+    document.querySelectorAll(".delete-btn")
+    .forEach(button=>{
+
+
+        button.addEventListener("click",()=>{
+
+
+            deleteTask(
+
+                button.dataset.id
+
+            );
+
+
+        });
+
+
+    });
+
+
+}
