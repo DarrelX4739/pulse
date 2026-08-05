@@ -744,7 +744,7 @@ function updateTaskOverview(tasks) {
 
 
 // =====================================
-// TODAY'S TASKS
+// TASKS COMING UP
 // =====================================
 
 function updateTodayTasks(tasks) {
@@ -754,25 +754,65 @@ function updateTodayTasks(tasks) {
 
 
 
-    const today =
-        new Date()
-            .toISOString()
-            .split("T")[0];
+    const priorityOrder = {
+
+        high:0,
+
+        medium:1,
+
+        low:2
+
+    };
 
 
 
-    const todaysTasks =
-        tasks.filter(task =>
+    const upcomingTasks = tasks
 
-            task.dueDate === today &&
-            !task.completed
+        .filter(task => !task.completed)
 
-        );
+        .sort((a,b)=>{
 
 
+            // First sort by due date
+
+            if(a.dueDate && b.dueDate){
+
+                return new Date(a.dueDate) -
+                       new Date(b.dueDate);
+
+            }
 
 
-    if(todaysTasks.length === 0){
+            if(a.dueDate){
+
+                return -1;
+
+            }
+
+
+            if(b.dueDate){
+
+                return 1;
+
+            }
+
+
+
+            // Then priority
+
+            return priorityOrder[a.priority] -
+                   priorityOrder[b.priority];
+
+
+        })
+
+        .slice(0,3);
+
+
+
+
+
+    if(upcomingTasks.length === 0){
 
 
         todayTasks.innerHTML = `
@@ -798,9 +838,19 @@ function updateTodayTasks(tasks) {
 
 
 
-    todaysTasks
-    .slice(0,3)
-    .forEach(task=>{
+    upcomingTasks.forEach(task=>{
+
+
+        const priorityIcon = {
+
+            high:"🔴",
+
+            medium:"🟠",
+
+            low:"🟡"
+
+        };
+
 
 
         todayTasks.innerHTML += `
@@ -813,13 +863,25 @@ function updateTodayTasks(tasks) {
 
 
                     <h3>
+
+                        ${priorityIcon[task.priority]}
                         ${task.title}
+
                     </h3>
 
 
                     <p>
+
                         ${task.description || "No description"}
+
                     </p>
+
+
+                    <small class="task-date">
+
+                        Due: ${task.dueDate || "No due date"}
+
+                    </small>
 
 
                 </div>
