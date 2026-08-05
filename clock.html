@@ -7,31 +7,234 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Pulse • Clock</title>
+    <title>Pulse Clock</title>
 
     <link rel="stylesheet" href="style.css">
+
+    <link rel="stylesheet" href="clock.css">
 
     <link rel="icon" type="image/png" href="ChatGPT Image Aug 4, 2026, 08_29_26 PM.png">
 
 </head>
 
-<body class="dashboard">
+<body>
 
     <div id="sidebar"></div>
 
     <main class="main-content">
 
-        <div class="coming-soon-card">
+        <div class="clock-page">
 
-            <h1>⏱ Clock</h1>
+            <div class="top-bar">
 
-            <p>Coming Soon</p>
+                <h1>Clock</h1>
+
+            </div>
+
+            <!-- Navigation -->
+
+            <div class="clock-tabs">
+
+                <button class="clock-tab active" data-tab="clock">
+                    🕒 Clock
+                </button>
+
+                <button class="clock-tab" data-tab="timer">
+                    ⏱ Timer
+                </button>
+
+                <button class="clock-tab" data-tab="pomodoro">
+                    🍅 Pomodoro
+                </button>
+
+                <button class="clock-tab" data-tab="stopwatch">
+                    ⏲ Stopwatch
+                </button>
+
+                <button class="clock-tab" data-tab="alarms">
+                    ⏰ Alarms
+                </button>
+
+            </div>
+
+            <!-- CLOCK -->
+
+            <section class="clock-panel active" id="clock">
+
+                <div class="clock-card">
+
+                    <h2 id="liveTime">
+                        00:00:00
+                    </h2>
+
+                    <p id="liveDate">
+                        Loading...
+                    </p>
+
+                </div>
+
+            </section>
+
+            <!-- TIMER -->
+
+            <section class="clock-panel" id="timer">
+
+                <div class="clock-card">
+
+                    <h2 id="timerDisplay">
+                        00:00:00
+                    </h2>
+
+                    <div class="timer-inputs">
+
+                        <input id="timerHours" type="number" min="0" max="99" placeholder="HH">
+
+                        <input id="timerMinutes" type="number" min="0" max="59" placeholder="MM">
+
+                        <input id="timerSeconds" type="number" min="0" max="59" placeholder="SS">
+
+                    </div>
+
+                    <div class="clock-buttons">
+
+                        <button id="startTimer">
+                            Start
+                        </button>
+
+                        <button id="pauseTimer">
+                            Pause
+                        </button>
+
+                        <button id="resetTimer">
+                            Reset
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- POMODORO -->
+
+            <section class="clock-panel" id="pomodoro">
+
+                <div class="clock-card">
+
+                    <h2 id="pomodoroDisplay">
+                        25:00
+                    </h2>
+
+                    <p id="pomodoroState">
+
+                        Work Session
+
+                    </p>
+
+                    <div class="clock-buttons">
+
+                        <button id="startPomodoro">
+
+                            Start
+
+                        </button>
+
+                        <button id="pausePomodoro">
+
+                            Pause
+
+                        </button>
+
+                        <button id="resetPomodoro">
+
+                            Reset
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- STOPWATCH -->
+
+            <section class="clock-panel" id="stopwatch">
+
+                <div class="clock-card">
+
+                    <h2 id="stopwatchDisplay">
+
+                        00:00.000
+
+                    </h2>
+
+                    <div class="clock-buttons">
+
+                        <button id="startStopwatch">
+
+                            Start
+
+                        </button>
+
+                        <button id="lapStopwatch">
+
+                            Lap
+
+                        </button>
+
+                        <button id="resetStopwatch">
+
+                            Reset
+
+                        </button>
+
+                    </div>
+
+                    <div id="lapList">
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- ALARMS -->
+
+            <section class="clock-panel" id="alarms">
+
+                <div class="clock-card">
+
+                    <div class="alarm-row">
+
+                        <input type="time" id="alarmTime">
+
+                        <input
+                            type="text"
+                            id="alarmLabel"
+                            placeholder="Alarm Label">
+
+                        <button id="addAlarm">
+
+                            Add Alarm
+
+                        </button>
+
+                    </div>
+
+                    <div id="alarmList">
+
+                    </div>
+
+                </div>
+
+            </section>
 
         </div>
 
     </main>
 
-    <script type="module" src="app.js"></script>
+    <script type="module" src="clock.js"></script>
 
 </body>
 
