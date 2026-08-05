@@ -1,340 +1,255 @@
 import { auth, db } from "./firebase.js";
 
 import {
-    onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
-
-import {
     doc,
-    setDoc,
-    onSnapshot
+    getDoc,
+    setDoc
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
 
 // =====================================
 // TAB SWITCHING
 // =====================================
 
-const tabs =
-    document.querySelectorAll(".clock-tab");
-
-const panels =
-    document.querySelectorAll(".clock-panel");
-
-function showTab(name) {
-
-    tabs.forEach(tab => {
-
-        tab.classList.toggle(
-            "active",
-            tab.dataset.tab === name
-        );
-
-    });
-
-    panels.forEach(panel => {
-
-        panel.classList.toggle(
-            "active",
-            panel.id === name
-        );
-
-    });
-
-}
+const tabs = document.querySelectorAll(".clock-tab");
+const panels = document.querySelectorAll(".clock-panel");
 
 tabs.forEach(tab => {
 
     tab.addEventListener("click", () => {
 
-        showTab(tab.dataset.tab);
+        tabs.forEach(t => t.classList.remove("active"));
+        panels.forEach(p => p.classList.remove("active"));
+
+        tab.classList.add("active");
+
+        document
+            .getElementById(tab.dataset.target)
+            .classList.add("active");
 
     });
 
 });
 
+
 // =====================================
 // LIVE CLOCK
 // =====================================
 
-const liveClock =
-    document.getElementById("liveClock");
+const clockDisplay =
+    document.getElementById("clockDisplay");
 
-const liveDate =
-    document.getElementById("liveDate");
+const clockDate =
+    document.getElementById("clockDate");
 
-function updateClock() {
+function updateClock(){
+
+    if(!clockDisplay) return;
 
     const now = new Date();
 
-    liveClock.textContent =
-        now.toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-            second: "2-digit"
+    clockDisplay.textContent =
+        now.toLocaleTimeString([],{
+
+            hour:"2-digit",
+            minute:"2-digit",
+            second:"2-digit"
+
         });
 
-    liveDate.textContent =
-        now.toLocaleDateString([], {
-            weekday: "long",
-            day: "numeric",
-            month: "long",
-            year: "numeric"
+    clockDate.textContent =
+        now.toLocaleDateString([],{
+
+            weekday:"long",
+            day:"numeric",
+            month:"long",
+            year:"numeric"
+
         });
 
 }
 
-setInterval(updateClock, 1000);
+updateClock();
 
-// =====================================
-// TIMER
-// =====================================
+setInterval(updateClock,1000);
 
-let timerSeconds = 0;
-
-let timerInterval = null;
-
-const timerDisplay =
-    document.getElementById("timerDisplay");
-
-const timerHours =
-    document.getElementById("timerHours");
-
-const timerMinutes =
-    document.getElementById("timerMinutes");
-
-const timerSecondsInput =
-    document.getElementById("timerSeconds");
-
-const startTimer =
-    document.getElementById("startTimer");
-
-const resetTimer =
-    document.getElementById("resetTimer");
-
-function updateTimer() {
-
-    const h =
-        Math.floor(timerSeconds / 3600)
-            .toString()
-            .padStart(2, "0");
-
-    const m =
-        Math.floor((timerSeconds % 3600) / 60)
-            .toString()
-            .padStart(2, "0");
-
-    const s =
-        (timerSeconds % 60)
-            .toString()
-            .padStart(2, "0");
-
-    timerDisplay.textContent =
-        `${h}:${m}:${s}`;
-
-}
-
-startTimer.addEventListener("click", () => {
-
-    if (timerInterval) return;
-
-    if (timerSeconds === 0) {
-
-        timerSeconds =
-            Number(timerHours.value) * 3600 +
-            Number(timerMinutes.value) * 60 +
-            Number(timerSecondsInput.value);
-
-    }
-
-    if (timerSeconds <= 0) return;
-
-    updateTimer();
-
-    timerInterval = setInterval(() => {
-
-        timerSeconds--;
-
-        updateTimer();
-
-        if (timerSeconds <= 0) {
-
-            clearInterval(timerInterval);
-
-            timerInterval = null;
-
-            if (Notification.permission === "granted") {
-
-                new Notification("Timer Finished!");
-
-            }
-
-        }
-
-    }, 1000);
-
-});
-
-resetTimer.addEventListener("click", () => {
-
-    clearInterval(timerInterval);
-
-    timerInterval = null;
-
-    timerSeconds = 0;
-
-    updateTimer();
-
-});
 
 // =====================================
 // STOPWATCH
 // =====================================
 
-let stopwatchSeconds = 0;
+let stopwatchTime = 0;
+
+let stopwatchRunning = false;
 
 let stopwatchInterval = null;
 
 const stopwatchDisplay =
     document.getElementById("stopwatchDisplay");
 
-const startStopwatch =
-    document.getElementById("startStopwatch");
+const laps =
+    document.getElementById("laps");
 
-const resetStopwatch =
-    document.getElementById("resetStopwatch");
 
-function updateStopwatch() {
+function formatMS(ms){
 
-    const h =
-        Math.floor(stopwatchSeconds / 3600)
-            .toString()
-            .padStart(2, "0");
+    const minutes =
+        Math.floor(ms/60000);
 
-    const m =
-        Math.floor((stopwatchSeconds % 3600) / 60)
-            .toString()
-            .padStart(2, "0");
+    const seconds =
+        Math.floor((ms%60000)/1000);
 
-    const s =
-        (stopwatchSeconds % 60)
-            .toString()
-            .padStart(2, "0");
+    const millis =
+        Math.floor((ms%1000)/10);
 
-    stopwatchDisplay.textContent =
-        `${h}:${m}:${s}`;
+    return `${String(minutes).padStart(2,"0")}:${String(seconds).padStart(2,"0")}.${String(millis).padStart(2,"0")}`;
 
 }
 
-startStopwatch.addEventListener("click", () => {
+function updateStopwatch(){
 
-    if (stopwatchInterval) {
+    stopwatchDisplay.textContent =
+        formatMS(stopwatchTime);
 
-        clearInterval(stopwatchInterval);
+}
 
-        stopwatchInterval = null;
+document
+.getElementById("swStart")
+?.addEventListener("click",()=>{
 
-        startStopwatch.textContent = "Start";
+    if(stopwatchRunning) return;
 
-        return;
+    stopwatchRunning=true;
 
-    }
+    const start =
+        Date.now()-stopwatchTime;
 
-    startStopwatch.textContent = "Pause";
+    stopwatchInterval=setInterval(()=>{
 
-    stopwatchInterval = setInterval(() => {
-
-        stopwatchSeconds++;
+        stopwatchTime=
+            Date.now()-start;
 
         updateStopwatch();
 
-    }, 1000);
+    },10);
 
 });
 
-resetStopwatch.addEventListener("click", () => {
+
+document
+.getElementById("swPause")
+?.addEventListener("click",()=>{
+
+    stopwatchRunning=false;
 
     clearInterval(stopwatchInterval);
 
-    stopwatchInterval = null;
+});
 
-    stopwatchSeconds = 0;
 
-    startStopwatch.textContent = "Start";
+document
+.getElementById("swReset")
+?.addEventListener("click",()=>{
+
+    stopwatchRunning=false;
+
+    clearInterval(stopwatchInterval);
+
+    stopwatchTime=0;
+
+    laps.innerHTML="";
 
     updateStopwatch();
 
 });
 
+
+document
+.getElementById("swLap")
+?.addEventListener("click",()=>{
+
+    if(stopwatchTime===0) return;
+
+    const lap=document.createElement("div");
+
+    lap.className="lap";
+
+    lap.innerHTML=`
+
+        <span>Lap ${laps.children.length+1}</span>
+
+        <span>${formatMS(stopwatchTime)}</span>
+
+    `;
+
+    laps.prepend(lap);
+
+});
+
+updateStopwatch();
+
+
 // =====================================
-// ALARMS
+// COUNTDOWN TIMER
 // =====================================
 
-let alarms = [];
+let timerSeconds=0;
 
-const alarmTime =
-    document.getElementById("alarmTime");
+let timerInterval;
 
-const addAlarm =
-    document.getElementById("addAlarm");
+const timerDisplay =
+    document.getElementById("timerDisplay");
 
-const alarmList =
-    document.getElementById("alarmList");
+function drawTimer(){
 
-function renderAlarms() {
+    const m =
+        Math.floor(timerSeconds/60);
 
-    alarmList.innerHTML = "";
+    const s =
+        timerSeconds%60;
 
-    alarms.forEach((alarm, index) => {
+    timerDisplay.textContent=
 
-        alarmList.innerHTML += `
-
-            <div class="alarm-item">
-
-                <span>${alarm.time}</span>
-
-                <button onclick="deleteAlarm(${index})">
-                    Delete
-                </button>
-
-            </div>
-
-        `;
-
-    });
+        `${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
 
 }
 
-window.deleteAlarm = function(index) {
+drawTimer();
 
-    alarms.splice(index, 1);
+document
+.getElementById("timerStart")
+?.addEventListener("click",()=>{
 
-    renderAlarms();
+    const mins =
+        Number(document.getElementById("timerMinutes").value)||0;
 
-    if (window.saveClock) {
+    const secs =
+        Number(document.getElementById("timerSeconds").value)||0;
 
-        window.saveClock();
+    timerSeconds =
+        mins*60+secs;
 
-    }
+    drawTimer();
 
-};
+    clearInterval(timerInterval);
 
-addAlarm.addEventListener("click", () => {
+    timerInterval=setInterval(()=>{
 
-    if (!alarmTime.value) return;
+        if(timerSeconds<=0){
 
-    alarms.push({
+            clearInterval(timerInterval);
 
-        time: alarmTime.value
+            alert("Timer finished!");
 
-    });
+            return;
 
-    renderAlarms();
+        }
 
-    if (window.saveClock) {
+        timerSeconds--;
 
-        window.saveClock();
+        drawTimer();
 
-    }
+    },1000);
 
 });
 
@@ -342,145 +257,177 @@ addAlarm.addEventListener("click", () => {
 // POMODORO
 // =====================================
 
-let pomodoroRunning = false;
-let pomodoroTime = 25 * 60;
-let pomodoroInterval = null;
-let pomodoroWork = true;
+let pomodoroInterval;
+
+let pomodoroSeconds = 0;
+
+let onBreak = false;
 
 const pomodoroDisplay =
     document.getElementById("pomodoroDisplay");
 
-const pomodoroStatus =
-    document.getElementById("pomodoroStatus");
+function drawPomodoro() {
 
-const startPomodoro =
-    document.getElementById("startPomodoro");
+    const m = Math.floor(pomodoroSeconds / 60);
 
-const resetPomodoro =
-    document.getElementById("resetPomodoro");
-
-function updatePomodoro() {
-
-    const minutes =
-        Math.floor(pomodoroTime / 60)
-            .toString()
-            .padStart(2, "0");
-
-    const seconds =
-        (pomodoroTime % 60)
-            .toString()
-            .padStart(2, "0");
+    const s = pomodoroSeconds % 60;
 
     pomodoroDisplay.textContent =
-        `${minutes}:${seconds}`;
-
-    pomodoroStatus.textContent =
-        pomodoroWork
-            ? "Work Session"
-            : "Break";
+        `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
 
 }
 
-startPomodoro.addEventListener("click", () => {
+document.getElementById("pomodoroStart")?.addEventListener("click", () => {
 
-    if (pomodoroRunning) {
+    clearInterval(pomodoroInterval);
 
-        clearInterval(pomodoroInterval);
+    const work =
+        Number(document.getElementById("workMinutes").value) || 25;
 
-        pomodoroRunning = false;
+    const brk =
+        Number(document.getElementById("breakMinutes").value) || 5;
 
-        startPomodoro.textContent = "Start";
+    onBreak = false;
 
-        return;
+    pomodoroSeconds = work * 60;
 
-    }
-
-    pomodoroRunning = true;
-
-    startPomodoro.textContent = "Pause";
+    drawPomodoro();
 
     pomodoroInterval = setInterval(() => {
 
-        pomodoroTime--;
+        pomodoroSeconds--;
 
-        if (pomodoroTime <= 0) {
+        drawPomodoro();
 
-            if (Notification.permission === "granted") {
+        if (pomodoroSeconds <= 0) {
 
-                new Notification("Pomodoro Finished!");
+            if (!onBreak) {
+
+                alert("Work session complete!");
+
+                onBreak = true;
+
+                pomodoroSeconds = brk * 60;
 
             }
 
-            pomodoroWork = !pomodoroWork;
+            else {
 
-            pomodoroTime =
-                pomodoroWork
-                    ? 25 * 60
-                    : 5 * 60;
+                alert("Break finished!");
+
+                onBreak = false;
+
+                pomodoroSeconds = work * 60;
+
+            }
 
         }
-
-        updatePomodoro();
 
     }, 1000);
 
 });
 
-resetPomodoro.addEventListener("click", () => {
+document.getElementById("pomodoroReset")?.addEventListener("click", () => {
 
     clearInterval(pomodoroInterval);
 
-    pomodoroRunning = false;
+    pomodoroSeconds = 0;
 
-    pomodoroWork = true;
-
-    pomodoroTime = 25 * 60;
-
-    startPomodoro.textContent = "Start";
-
-    updatePomodoro();
+    drawPomodoro();
 
 });
 
+drawPomodoro();
+
+
 // =====================================
-// FIRESTORE
+// ALARMS
 // =====================================
 
-onAuthStateChanged(auth, (user) => {
+let alarms = [];
 
-    if (!user) return;
+const alarmList =
+    document.getElementById("alarmList");
 
-    const ref = doc(db, "clock", user.uid);
+function renderAlarms() {
 
-    onSnapshot(ref, (snap) => {
+    if (!alarmList) return;
 
-        if (!snap.exists()) return;
+    alarmList.innerHTML = "";
 
-        const data = snap.data();
+    alarms.forEach((alarm, index) => {
 
-        alarms = data.alarms || [];
+        const div = document.createElement("div");
 
-        renderAlarms();
+        div.className = "alarm";
+
+        div.innerHTML = `
+
+            <div>
+
+                <strong>${alarm.time}</strong>
+
+                <br>
+
+                <small>${alarm.days.join(", ")}</small>
+
+            </div>
+
+            <button onclick="deleteAlarm(${index})">
+
+                Delete
+
+            </button>
+
+        `;
+
+        alarmList.appendChild(div);
 
     });
 
-    async function saveClock() {
+}
 
-        await setDoc(
-            ref,
-            {
-                alarms
-            },
-            {
-                merge: true
-            }
-        );
+window.deleteAlarm = async function(index) {
 
-    }
+    alarms.splice(index, 1);
 
-    window.saveClock = saveClock;
+    renderAlarms();
+
+    await saveClockData();
+
+};
+
+document.getElementById("addAlarm")?.addEventListener("click", async () => {
+
+    const time =
+        document.getElementById("alarmTime").value;
+
+    if (!time) return;
+
+    const selectedDays = [];
+
+    document
+        .querySelectorAll(".alarm-day:checked")
+        .forEach(day => {
+
+            selectedDays.push(day.value);
+
+        });
+
+    alarms.push({
+
+        time,
+
+        days: selectedDays
+
+    });
+
+    renderAlarms();
+
+    await saveClockData();
 
 });
+
 
 // =====================================
 // CHECK ALARMS
@@ -490,20 +437,31 @@ setInterval(() => {
 
     const now = new Date();
 
-    const current =
-        now.toTimeString().slice(0, 5);
+    const time =
+        now.toLocaleTimeString([], {
+
+            hour: "2-digit",
+
+            minute: "2-digit",
+
+            hour12: false
+
+        });
+
+    const weekday =
+        ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][now.getDay()];
 
     alarms.forEach(alarm => {
 
-        if (alarm.time === current) {
+        if (
 
-            if (Notification.permission === "granted") {
+            alarm.time === time &&
 
-                new Notification("Alarm", {
-                    body: `It's ${alarm.time}`
-                });
+            alarm.days.includes(weekday)
 
-            }
+        ) {
+
+            alert("Alarm!");
 
         }
 
@@ -511,22 +469,74 @@ setInterval(() => {
 
 }, 1000);
 
+
 // =====================================
-// INITIALISE
+// FIRESTORE SAVE / LOAD
 // =====================================
 
-if ("Notification" in window) {
+async function saveClockData() {
 
-    Notification.requestPermission();
+    const user = auth.currentUser;
+
+    if (!user) return;
+
+    await setDoc(
+
+        doc(db, "clock", user.uid),
+
+        {
+
+            alarms,
+
+            workMinutes:
+
+                document.getElementById("workMinutes")?.value || 25,
+
+            breakMinutes:
+
+                document.getElementById("breakMinutes")?.value || 5
+
+        }
+
+    );
 
 }
 
-showTab("clock");
+async function loadClockData() {
 
-updateClock();
+    const user = auth.currentUser;
 
-updateTimer();
+    if (!user) return;
 
-updateStopwatch();
+    const snapshot =
+        await getDoc(doc(db, "clock", user.uid));
 
-updatePomodoro();
+    if (!snapshot.exists()) return;
+
+    const data = snapshot.data();
+
+    alarms = data.alarms || [];
+
+    renderAlarms();
+
+    if (document.getElementById("workMinutes"))
+
+        document.getElementById("workMinutes").value =
+            data.workMinutes ?? 25;
+
+    if (document.getElementById("breakMinutes"))
+
+        document.getElementById("breakMinutes").value =
+            data.breakMinutes ?? 5;
+
+}
+
+auth.onAuthStateChanged?.((user) => {
+
+    if (user) {
+
+        loadClockData();
+
+    }
+
+});
