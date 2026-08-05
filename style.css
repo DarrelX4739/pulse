@@ -574,17 +574,136 @@ body.light .coming-soon-card {
 
 }
 
-/* Dashboard Today's Tasks */
+/* ==========================================
+   DASHBOARD TASKS COMING UP
+========================================== */
+
 
 #todayTasks {
 
-    display: flex;
+    display:flex;
 
-    flex-direction: column;
+    flex-direction:column;
 
-    gap: 12px;
+    gap:16px;
 
-    margin-top: 15px;
+    margin-top:18px;
+
+}
+
+
+/* Task Cards on Dashboard */
+
+#todayTasks .task-card {
+
+    display:flex;
+
+    align-items:center;
+
+    padding:20px 22px;
+
+    background:#1b1b1b;
+
+    border-radius:18px;
+
+    border:1px solid #2d2d2d;
+
+    border-left:7px solid transparent;
+
+    transition:.2s;
+
+}
+
+
+#todayTasks .task-card:hover {
+
+    transform:translateY(-3px);
+
+    box-shadow:0 10px 25px rgba(0,0,0,.25);
+
+}
+
+
+
+body.light #todayTasks .task-card {
+
+    background:white;
+
+    border-color:#e3e3e3;
+
+}
+
+
+
+/* Priority colours */
+
+#todayTasks .task-card.high {
+
+    border-left-color:#ef4444;
+
+}
+
+
+#todayTasks .task-card.medium {
+
+    border-left-color:#f97316;
+
+}
+
+
+#todayTasks .task-card.low {
+
+    border-left-color:#eab308;
+
+}
+
+
+
+/* Task content */
+
+
+#todayTasks .task-main {
+
+    width:100%;
+
+}
+
+
+#todayTasks .task-main h3 {
+
+    font-size:1.15rem;
+
+    margin-bottom:8px;
+
+}
+
+
+
+#todayTasks .task-main p {
+
+    opacity:.75;
+
+    margin-bottom:8px;
+
+}
+
+
+
+#todayTasks .task-date {
+
+    font-size:.85rem;
+
+    opacity:.55;
+
+}
+
+
+
+/* Empty state */
+
+#todayTasks .empty-message {
+
+    margin-top:0;
 
 }
 
