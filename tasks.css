@@ -359,6 +359,20 @@ body.light .task-card{
 
     background:#22c55e;
 
+    font-size:1.4rem !important;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+}
+
+.complete-btn:hover{
+
+    background:#16a34a;
+
 }
 
 .complete-btn:hover{
