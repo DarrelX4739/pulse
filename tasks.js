@@ -44,6 +44,7 @@ const remainingTasks = document.getElementById("remainingTasks");
 let currentUser = null;
 
 
+
 // ======================
 // Modal
 // ======================
@@ -112,7 +113,6 @@ saveTask.addEventListener("click", async()=>{
 
     await addDoc(collection(db,"tasks"),{
 
-
         owner: currentUser.uid,
 
         title: taskTitle.value.trim(),
@@ -127,11 +127,10 @@ saveTask.addEventListener("click", async()=>{
 
         created:serverTimestamp()
 
-
     });
 
 
-    taskModal.style.display="none";
+    taskModal.style.display = "none";
 
     clearInputs();
 
@@ -141,7 +140,7 @@ saveTask.addEventListener("click", async()=>{
 
 
 // ======================
-// Listen Tasks
+// Firebase Listener
 // ======================
 
 function listenForTasks(){
@@ -164,8 +163,7 @@ function listenForTasks(){
         const tasks=[];
 
 
-        snapshot.forEach((item)=>{
-
+        snapshot.forEach(item=>{
 
             tasks.push({
 
@@ -175,9 +173,7 @@ function listenForTasks(){
 
             });
 
-
         });
-
 
 
         renderTasks(tasks);
@@ -190,22 +186,24 @@ function listenForTasks(){
 
 
 
-
 // ======================
-// Complete Task
+// Toggle Complete
 // ======================
 
-async function toggleComplete(id,currentStatus){
+async function toggleComplete(id,status){
 
 
-    const taskRef = doc(db,"tasks",id);
+    await updateDoc(
 
+        doc(db,"tasks",id),
 
-    await updateDoc(taskRef,{
+        {
 
-        completed:!currentStatus
+            completed:!status
 
-    });
+        }
+
+    );
 
 
 }
@@ -219,41 +217,43 @@ async function toggleComplete(id,currentStatus){
 async function deleteTask(id){
 
 
-    const taskRef = doc(db,"tasks",id);
+    await deleteDoc(
 
+        doc(db,"tasks",id)
 
-    await deleteDoc(taskRef);
+    );
 
 
 }
 
 
 
-
 // ======================
-// Render
+// Render Tasks
 // ======================
 
 function renderTasks(tasks){
 
 
-    taskList.innerHTML="";
-    completedTaskList.innerHTML="";
+    taskList.innerHTML = "";
+
+    completedTaskList.innerHTML = "";
+
 
 
     totalTasks.textContent = tasks.length;
 
 
     completedTasks.textContent =
-        tasks.filter(t=>t.completed).length;
+        tasks.filter(task=>task.completed).length;
 
 
     remainingTasks.textContent =
-        tasks.filter(t=>!t.completed).length;
+        tasks.filter(task=>!task.completed).length;
 
 
 
-    const priorityOrder={
+    const priorityOrder = {
 
         high:0,
 
@@ -264,19 +264,16 @@ function renderTasks(tasks){
     };
 
 
-
     tasks.sort((a,b)=>{
-
 
         return priorityOrder[a.priority] -
                priorityOrder[b.priority];
-
 
     });
 
 
 
-    const incomplete =
+    const active =
         tasks.filter(task=>!task.completed);
 
 
@@ -286,12 +283,14 @@ function renderTasks(tasks){
 
 
 
-    if(incomplete.length===0){
+    if(active.length === 0){
 
-        taskList.innerHTML=`
+        taskList.innerHTML = `
 
         <p class="empty-message">
+
             🎉 No active tasks.
+
         </p>
 
         `;
@@ -299,39 +298,33 @@ function renderTasks(tasks){
     }
 
 
-
-    incomplete.forEach(task=>{
-
+    active.forEach(task=>{
 
         taskList.innerHTML += createTaskCard(task);
-
 
     });
 
 
 
 
-    if(completed.length===0){
+    if(completed.length === 0){
 
-
-        completedTaskList.innerHTML=`
+        completedTaskList.innerHTML = `
 
         <p class="empty-message">
+
             No completed tasks.
+
         </p>
 
         `;
 
-
     }
-
 
 
     completed.forEach(task=>{
 
-
         completedTaskList.innerHTML += createTaskCard(task);
-
 
     });
 
@@ -344,7 +337,6 @@ function renderTasks(tasks){
 
 
 
-
 // ======================
 // Task Card
 // ======================
@@ -352,7 +344,7 @@ function renderTasks(tasks){
 function createTaskCard(task){
 
 
-    const colour={
+    const priorityIcon = {
 
         high:"🔴",
 
@@ -363,76 +355,82 @@ function createTaskCard(task){
     };
 
 
-
     return `
 
 
-    <div class="task-card ${task.priority} ${task.completed ? "completed":""}">
+<div class="task-card ${task.priority} ${task.completed ? "completed":""}">
 
 
-        <div class="task-main">
+    <div class="task-main">
 
 
-            <h3>
-                ${colour[task.priority]} ${task.title}
-            </h3>
+        <h3>
+
+            ${priorityIcon[task.priority]} ${task.title}
+
+        </h3>
 
 
-            <p>
-                ${task.description || "No description"}
-            </p>
+        <p>
+
+            ${task.description || "No description"}
+
+        </p>
 
 
-            <small class="task-date">
+        <small class="task-date">
 
-                Due: ${task.dueDate || "No due date"}
+            Due: ${task.dueDate || "No due date"}
 
-            </small>
-
-
-        </div>
-
-
-
-        <div class="task-actions">
-
-
-            <button 
-            class="complete-btn"
-            data-id="${task.id}"
-            data-completed="${task.completed}">
-
-                ✓
-
-            </button>
-
-
-            <button
-            class="delete-btn"
-            data-id="${task.id}">
-
-                🗑
-
-            </button>
-
-
-        </div>
-
+        </small>
 
 
     </div>
 
 
-    `;
 
+    <div class="task-actions">
+
+
+        <button
+
+        class="complete-btn"
+
+        data-id="${task.id}"
+
+        data-completed="${task.completed}">
+
+            ${task.completed ? "☑" : "☐"}
+
+        </button>
+
+
+
+        <button
+
+        class="delete-btn"
+
+        data-id="${task.id}">
+
+            🗑
+
+        </button>
+
+
+    </div>
+
+
+</div>
+
+
+`;
 
 }
 
 
 
-
 // ======================
-// Button Events
+// Button Listeners
 // ======================
 
 function addButtonEvents(){
@@ -449,7 +447,7 @@ function addButtonEvents(){
 
                 button.dataset.id,
 
-                button.dataset.completed==="true"
+                button.dataset.completed === "true"
 
             );
 
