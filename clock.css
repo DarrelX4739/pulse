@@ -285,3 +285,309 @@ body.light #addAlarm {
     background: #2563eb;
 
 }
+
+/* ==========================================
+   POMODORO
+========================================== */
+
+.pomodoro-settings {
+
+    display: grid;
+
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+
+    gap: 20px;
+
+    margin-bottom: 35px;
+
+}
+
+.setting {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+
+}
+
+.setting label {
+
+    font-weight: 600;
+
+    opacity: .9;
+
+}
+
+.setting input {
+
+    width: 100%;
+
+}
+
+.pomodoro-status {
+
+    text-align: center;
+
+    margin-top: -10px;
+
+    margin-bottom: 20px;
+
+    font-size: 1.1rem;
+
+    opacity: .8;
+
+}
+
+/* ==========================================
+   STOPWATCH LAPS
+========================================== */
+
+#lapContainer {
+
+    margin-top: 35px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 12px;
+
+    max-height: 320px;
+
+    overflow-y: auto;
+
+}
+
+.lap {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    background: #252525;
+
+    border-radius: 12px;
+
+    padding: 14px 18px;
+
+    border-left: 5px solid #dc2626;
+
+}
+
+body.light .lap {
+
+    background: #f3f4f6;
+
+    border-left-color: #2563eb;
+
+}
+
+/* ==========================================
+   ALARMS
+========================================== */
+
+.alarm-form {
+
+    display: flex;
+
+    gap: 15px;
+
+    flex-wrap: wrap;
+
+    margin-bottom: 22px;
+
+}
+
+.alarm-form input:first-child {
+
+    width: 170px;
+
+}
+
+.alarm-form input:last-child {
+
+    flex: 1;
+
+}
+
+.repeat-days {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 10px;
+
+    margin-bottom: 25px;
+
+}
+
+.repeat-days label {
+
+    background: #252525;
+
+    border-radius: 10px;
+
+    padding: 10px 14px;
+
+    cursor: pointer;
+
+    user-select: none;
+
+    transition: .2s;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+}
+
+.repeat-days label:hover {
+
+    background: #303030;
+
+}
+
+body.light .repeat-days label {
+
+    background: #eef2ff;
+
+}
+
+body.light .repeat-days label:hover {
+
+    background: #dbeafe;
+
+}
+
+#alarmList {
+
+    margin-top: 30px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 15px;
+
+}
+
+.alarm {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    background: #252525;
+
+    padding: 18px 22px;
+
+    border-radius: 14px;
+
+}
+
+body.light .alarm {
+
+    background: #f3f4f6;
+
+}
+
+.alarm strong {
+
+    font-size: 1.2rem;
+
+}
+
+.alarm small {
+
+    opacity: .7;
+
+}
+
+.alarm button {
+
+    padding: 9px 16px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background: #ef4444;
+
+    color: white;
+
+    cursor: pointer;
+
+    font-weight: 600;
+
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media (max-width: 850px) {
+
+    .live-clock {
+
+        font-size: 3.2rem;
+
+    }
+
+    .big-display {
+
+        font-size: 2.8rem;
+
+    }
+
+    .clock-card {
+
+        padding: 28px;
+
+    }
+
+}
+
+@media (max-width: 650px) {
+
+    .clock-tabs {
+
+        justify-content: center;
+
+    }
+
+    .button-row {
+
+        flex-direction: column;
+
+    }
+
+    .button-row button,
+
+    #addAlarm {
+
+        width: 100%;
+
+    }
+
+    .alarm-form {
+
+        flex-direction: column;
+
+    }
+
+    .alarm-form input:first-child {
+
+        width: 100%;
+
+    }
+
+}
