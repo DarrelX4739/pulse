@@ -13,26 +13,84 @@
 
     <link rel="icon" type="image/png" href="ChatGPT Image Aug 4, 2026, 08_29_26 PM.png">
 
+    <link rel="stylesheet" href="clock.css">
+
 </head>
 
-<body class="dashboard">
+<main class="main-content">
 
-    <div id="sidebar"></div>
+    <div class="dashboard-card">
 
-    <main class="main-content">
+        <div class="top-bar">
 
-        <div class="coming-soon-card">
+            <h1>Clock</h1>
 
-            <h1>🕖 Clock</h1>
+            <button id="logoutBtn">
 
-            <p>Coming Soon</p>
+                Log Out
+
+            </button>
 
         </div>
 
-    </main>
+        <div class="clock-card">
 
-    <script type="module" src="app.js"></script>
+            <div class="analog-clock">
 
-</body>
+                <div class="clock-face">
 
-</html>
+                    <span class="number n12">12</span>
+                    <span class="number n3">3</span>
+                    <span class="number n6">6</span>
+                    <span class="number n9">9</span>
+
+                    <div class="tick t1"></div>
+                    <div class="tick t2"></div>
+                    <div class="tick t3"></div>
+                    <div class="tick t4"></div>
+                    <div class="tick t5"></div>
+                    <div class="tick t6"></div>
+                    <div class="tick t7"></div>
+                    <div class="tick t8"></div>
+
+                    <div id="hourHand" class="hand hour-hand"></div>
+
+                    <div id="minuteHand" class="hand minute-hand"></div>
+
+                    <div id="secondHand" class="hand second-hand"></div>
+
+                    <div class="centre-dot"></div>
+
+                </div>
+
+            </div>
+
+            <div class="clock-info">
+
+                <div id="digitalClock">
+
+                    00:00:00
+
+                </div>
+
+                <div id="clockDate">
+
+                    Loading...
+
+                </div>
+
+                <div class="clock-location">
+
+                    Sydney, Australia
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+<script type="module" src="clock.js"></script>
