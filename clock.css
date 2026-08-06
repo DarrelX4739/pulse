@@ -105,35 +105,32 @@ body.light .clock-face {
 
     position: absolute;
 
-    left: 50%;
-
-    top: 50%;
-
     width: 3px;
 
-    height: 18px;
+    height: 12px;
 
-    background: #777;
+    background: #7a7a7a;
 
-    transform-origin: center -180px;
+    border-radius: 999px;
 
 }
 
 .hour-tick {
 
-    height: 28px;
-
     width: 5px;
 
-    background: #cfcfcf;
+    height: 24px;
+
+    background: white;
 
 }
 
 body.light .hour-tick {
 
-    background: #444;
+    background: #111827;
 
 }
+
 
 
 /* ==========================================
