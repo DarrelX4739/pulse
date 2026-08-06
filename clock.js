@@ -16,17 +16,34 @@ const clockDate = document.getElementById("clockDate");
 
 // ---------- Generate Tick Marks ----------
 
+const centre = 210;
+
 for (let i = 0; i < 60; i++) {
 
     const tick = document.createElement("div");
 
     tick.classList.add("clock-tick");
 
-    if (i % 5 === 0) {
+    const isHour = i % 5 === 0;
+
+    if (isHour) {
 
         tick.classList.add("hour-tick");
 
     }
+
+    const angle = (i * 6 - 90) * Math.PI / 180;
+
+    const outerRadius = 190;
+
+    const innerRadius = isHour ? 165 : 178;
+
+    const x = centre + innerRadius * Math.cos(angle);
+
+    const y = centre + innerRadius * Math.sin(angle);
+
+    tick.style.left = `${x}px`;
+    tick.style.top = `${y}px`;
 
     tick.style.transform =
         `translate(-50%, -50%) rotate(${i * 6}deg)`;
@@ -34,8 +51,6 @@ for (let i = 0; i < 60; i++) {
     clockFace.appendChild(tick);
 
 }
-
-
 // ---------- Generate Numbers ----------
 
 const radius = 170;
