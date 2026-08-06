@@ -5,7 +5,6 @@ import {
     addDoc,
     query,
     where,
-    orderBy,
     onSnapshot,
     serverTimestamp,
     updateDoc,
@@ -40,9 +39,7 @@ const totalTasks = document.getElementById("totalTasks");
 const completedTasks = document.getElementById("completedTasks");
 const remainingTasks = document.getElementById("remainingTasks");
 
-
 let currentUser = null;
-
 
 
 // ======================
@@ -55,7 +52,6 @@ newTaskBtn.addEventListener("click", () => {
 
 });
 
-
 cancelTask.addEventListener("click", () => {
 
     taskModal.style.display = "none";
@@ -64,8 +60,7 @@ cancelTask.addEventListener("click", () => {
 
 });
 
-
-function clearInputs(){
+function clearInputs() {
 
     taskTitle.value = "";
     taskDescription.value = "";
@@ -75,14 +70,13 @@ function clearInputs(){
 }
 
 
-
 // ======================
 // Authentication
 // ======================
 
-onAuthStateChanged(auth, (user)=>{
+onAuthStateChanged(auth, (user) => {
 
-    if(!user) return;
+    if (!user) return;
 
     currentUser = user;
 
@@ -91,18 +85,15 @@ onAuthStateChanged(auth, (user)=>{
 });
 
 
-
 // ======================
 // Add Task
 // ======================
 
-saveTask.addEventListener("click", async()=>{
+saveTask.addEventListener("click", async () => {
 
+    if (!currentUser) return;
 
-    if(!currentUser) return;
-
-
-    if(taskTitle.value.trim() === ""){
+    if (taskTitle.value.trim() === "") {
 
         alert("Please enter a task title.");
 
@@ -110,8 +101,7 @@ saveTask.addEventListener("click", async()=>{
 
     }
 
-
-    await addDoc(collection(db,"tasks"),{
+    await addDoc(collection(db, "tasks"), {
 
         owner: currentUser.uid,
 
@@ -123,51 +113,42 @@ saveTask.addEventListener("click", async()=>{
 
         dueDate: taskDueDate.value,
 
-        completed:false,
+        completed: false,
 
-        created:serverTimestamp()
+        created: serverTimestamp()
 
     });
-
 
     taskModal.style.display = "none";
 
     clearInputs();
 
-
 });
-
 
 
 // ======================
 // Firebase Listener
 // ======================
 
-function listenForTasks(){
-
+function listenForTasks() {
 
     const q = query(
 
-        collection(db,"tasks"),
+        collection(db, "tasks"),
 
-        where("owner","==",currentUser.uid),
-
-        orderBy("created","asc")
+        where("owner", "==", currentUser.uid)
 
     );
 
+    onSnapshot(q, (snapshot) => {
 
-    onSnapshot(q,(snapshot)=>{
+        const tasks = [];
 
-
-        const tasks=[];
-
-
-        snapshot.forEach(item=>{
+        snapshot.forEach(item => {
 
             tasks.push({
 
-                id:item.id,
+                id: item.id,
 
                 ...item.data()
 
@@ -175,36 +156,28 @@ function listenForTasks(){
 
         });
 
-
         renderTasks(tasks);
-
 
     });
 
-
 }
-
-
-
 // ======================
 // Toggle Complete
 // ======================
 
-async function toggleComplete(id,status){
-
+async function toggleComplete(id, status) {
 
     await updateDoc(
 
-        doc(db,"tasks",id),
+        doc(db, "tasks", id),
 
         {
 
-            completed:!status
+            completed: !status
 
         }
 
     );
-
 
 }
 
@@ -214,15 +187,13 @@ async function toggleComplete(id,status){
 // Delete Task
 // ======================
 
-async function deleteTask(id){
-
+async function deleteTask(id) {
 
     await deleteDoc(
 
-        doc(db,"tasks",id)
+        doc(db, "tasks", id)
 
     );
-
 
 }
 
@@ -232,8 +203,7 @@ async function deleteTask(id){
 // Render Tasks
 // ======================
 
-function renderTasks(tasks){
-
+function renderTasks(tasks) {
 
     taskList.innerHTML = "";
 
@@ -243,47 +213,72 @@ function renderTasks(tasks){
 
     totalTasks.textContent = tasks.length;
 
-
     completedTasks.textContent =
-        tasks.filter(task=>task.completed).length;
-
+        tasks.filter(task => task.completed).length;
 
     remainingTasks.textContent =
-        tasks.filter(task=>!task.completed).length;
+        tasks.filter(task => !task.completed).length;
 
 
 
     const priorityOrder = {
 
-        high:0,
+        high: 0,
 
-        medium:1,
+        medium: 1,
 
-        low:2
+        low: 2
 
     };
 
 
-    tasks.sort((a,b)=>{
 
-        return priorityOrder[a.priority] -
-               priorityOrder[b.priority];
+    // ======================
+    // Sort:
+    // 1. Due Date
+    // 2. Priority
+    // 3. Created
+    // ======================
+
+    tasks.sort((a, b) => {
+
+        const dateA = a.dueDate || "9999-12-31";
+        const dateB = b.dueDate || "9999-12-31";
+
+        if (dateA !== dateB) {
+
+            return dateA.localeCompare(dateB);
+
+        }
+
+        const priorityDiff =
+            priorityOrder[a.priority] -
+            priorityOrder[b.priority];
+
+        if (priorityDiff !== 0) {
+
+            return priorityDiff;
+
+        }
+
+        const createdA = a.created?.seconds ?? 0;
+        const createdB = b.created?.seconds ?? 0;
+
+        return createdA - createdB;
 
     });
 
 
 
     const active =
-        tasks.filter(task=>!task.completed);
-
+        tasks.filter(task => !task.completed);
 
     const completed =
-        tasks.filter(task=>task.completed);
+        tasks.filter(task => task.completed);
 
 
 
-
-    if(active.length === 0){
+    if (active.length === 0) {
 
         taskList.innerHTML = `
 
@@ -298,7 +293,8 @@ function renderTasks(tasks){
     }
 
 
-    active.forEach(task=>{
+
+    active.forEach(task => {
 
         taskList.innerHTML += createTaskCard(task);
 
@@ -306,8 +302,7 @@ function renderTasks(tasks){
 
 
 
-
-    if(completed.length === 0){
+    if (completed.length === 0) {
 
         completedTaskList.innerHTML = `
 
@@ -322,7 +317,8 @@ function renderTasks(tasks){
     }
 
 
-    completed.forEach(task=>{
+
+    completed.forEach(task => {
 
         completedTaskList.innerHTML += createTaskCard(task);
 
@@ -332,7 +328,6 @@ function renderTasks(tasks){
 
     addButtonEvents();
 
-
 }
 
 
@@ -341,89 +336,75 @@ function renderTasks(tasks){
 // Task Card
 // ======================
 
-function createTaskCard(task){
-
+function createTaskCard(task) {
 
     const priorityIcon = {
 
-        high:"🔴",
+        high: "🔴",
 
-        medium:"🟠",
+        medium: "🟠",
 
-        low:"🟡"
+        low: "🟡"
 
     };
 
 
+
     return `
 
+    <div class="task-card">
 
-<div class="task-card ${task.priority} ${task.completed ? "completed":""}">
+        <div class="task-main">
 
+            <h3>
 
-    <div class="task-main">
+                ${priorityIcon[task.priority]} ${task.title}
 
+            </h3>
 
-        <h3>
+            <p>
 
-            ${priorityIcon[task.priority]} ${task.title}
+                ${task.description || "No description"}
 
-        </h3>
+            </p>
 
+            <small class="task-date">
 
-        <p>
+                Due: ${task.dueDate || "No due date"}
 
-            ${task.description || "No description"}
+            </small>
 
-        </p>
+        </div>
 
+        <div class="task-actions">
 
-        <small class="task-date">
+            <button
 
-            Due: ${task.dueDate || "No due date"}
+                class="complete-btn"
 
-        </small>
+                data-id="${task.id}"
 
+                data-completed="${task.completed}">
 
-    </div>
+                ${task.completed ? "☑" : "☐"}
 
+            </button>
 
+            <button
 
-    <div class="task-actions">
+                class="delete-btn"
 
+                data-id="${task.id}">
 
-        <button
+                🗑
 
-        class="complete-btn"
+            </button>
 
-        data-id="${task.id}"
-
-        data-completed="${task.completed}">
-
-            ${task.completed ? "☑" : "☐"}
-
-        </button>
-
-
-
-        <button
-
-        class="delete-btn"
-
-        data-id="${task.id}">
-
-            🗑
-
-        </button>
-
+        </div>
 
     </div>
 
-
-</div>
-
-
-`;
+    `;
 
 }
 
@@ -433,50 +414,42 @@ function createTaskCard(task){
 // Button Listeners
 // ======================
 
-function addButtonEvents(){
-
+function addButtonEvents() {
 
     document.querySelectorAll(".complete-btn")
-    .forEach(button=>{
 
+        .forEach(button => {
 
-        button.addEventListener("click",()=>{
+            button.addEventListener("click", () => {
 
+                toggleComplete(
 
-            toggleComplete(
+                    button.dataset.id,
 
-                button.dataset.id,
+                    button.dataset.completed === "true"
 
-                button.dataset.completed === "true"
+                );
 
-            );
-
+            });
 
         });
-
-
-    });
 
 
 
     document.querySelectorAll(".delete-btn")
-    .forEach(button=>{
 
+        .forEach(button => {
 
-        button.addEventListener("click",()=>{
+            button.addEventListener("click", () => {
 
+                deleteTask(
 
-            deleteTask(
+                    button.dataset.id
 
-                button.dataset.id
+                );
 
-            );
-
+            });
 
         });
-
-
-    });
-
 
 }
