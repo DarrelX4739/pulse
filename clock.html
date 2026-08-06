@@ -13,6 +13,9 @@
     <link rel="stylesheet"
         href="style.css">
 
+    <link rel="stylesheet"
+        href="clock.css">
+
     <link rel="icon"
         type="image/png"
         href="ChatGPT Image Aug 4, 2026, 08_29_26 PM.png">
@@ -27,55 +30,58 @@
 
         <div class="dashboard-card">
 
-            <!-- ==========================
-                 HEADER
-            =========================== -->
-
             <div class="top-bar">
 
                 <h1>Clock</h1>
 
                 <button id="logoutBtn">
+
                     Log Out
+
                 </button>
 
             </div>
 
-            <!-- ==========================
-                 TAB BAR
-            =========================== -->
+            <!-- =========================
+                 Tabs
+            ========================== -->
 
             <div class="clock-tabs">
 
-                <button class="clock-tab active"
+                <button
+                    class="clock-tab active"
                     data-tab="clock">
 
                     🕒 Clock
 
                 </button>
 
-                <button class="clock-tab"
+                <button
+                    class="clock-tab"
                     data-tab="timer">
 
                     ⏲ Timer
 
                 </button>
 
-                <button class="clock-tab"
+                <button
+                    class="clock-tab"
                     data-tab="stopwatch">
 
                     ⏱ Stopwatch
 
                 </button>
 
-                <button class="clock-tab"
+                <button
+                    class="clock-tab"
                     data-tab="pomodoro">
 
                     🍅 Pomodoro
 
                 </button>
 
-                <button class="clock-tab"
+                <button
+                    class="clock-tab"
                     data-tab="alarms">
 
                     ⏰ Alarms
@@ -84,12 +90,12 @@
 
             </div>
 
-            <!-- ==========================
+            <!-- =========================
                  CLOCK
-            =========================== -->
+            ========================== -->
 
             <section
-                id="clockSection"
+                id="clock"
                 class="clock-section active">
 
                 <div class="clock-card">
@@ -114,12 +120,12 @@
 
             </section>
 
-            <!-- ==========================
+            <!-- =========================
                  TIMER
-            =========================== -->
+            ========================== -->
 
             <section
-                id="timerSection"
+                id="timer"
                 class="clock-section">
 
                 <div class="clock-card">
@@ -136,22 +142,21 @@
                             id="timerHours"
                             type="number"
                             min="0"
-                            max="99"
-                            placeholder="HH">
+                            value="0">
 
                         <input
                             id="timerMinutes"
                             type="number"
                             min="0"
                             max="59"
-                            placeholder="MM">
+                            value="0">
 
                         <input
                             id="timerSeconds"
                             type="number"
                             min="0"
                             max="59"
-                            placeholder="SS">
+                            value="0">
 
                     </div>
 
@@ -165,22 +170,19 @@
 
                     <div class="button-row">
 
-                        <button
-                            id="startTimer">
+                        <button id="startTimer">
 
                             Start
 
                         </button>
 
-                        <button
-                            id="pauseTimer">
+                        <button id="pauseTimer">
 
                             Pause
 
                         </button>
 
-                        <button
-                            id="resetTimer">
+                        <button id="resetTimer">
 
                             Reset
 
@@ -192,12 +194,12 @@
 
             </section>
 
-            <!-- ==========================
+            <!-- =========================
                  STOPWATCH
-            =========================== -->
+            ========================== -->
 
             <section
-                id="stopwatchSection"
+                id="stopwatch"
                 class="clock-section">
 
                 <div class="clock-card">
@@ -218,22 +220,19 @@
 
                     <div class="button-row">
 
-                        <button
-                            id="startStopwatch">
+                        <button id="startStopwatch">
 
                             Start
 
                         </button>
 
-                        <button
-                            id="lapStopwatch">
+                        <button id="lapStopwatch">
 
                             Lap
 
                         </button>
 
-                        <button
-                            id="resetStopwatch">
+                        <button id="resetStopwatch">
 
                             Reset
 
@@ -250,56 +249,71 @@
 
             </section>
 
-            <!-- ==========================
+                        <!-- =========================
                  POMODORO
-            =========================== -->
+            ========================== -->
 
             <section
-                id="pomodoroSection"
+                id="pomodoro"
                 class="clock-section">
 
                 <div class="clock-card">
 
                     <h2>
 
-                        Pomodoro
+                        Pomodoro Timer
 
                     </h2>
 
                     <div class="pomodoro-settings">
 
-                        <label>
+                        <div class="setting">
 
-                            Work
+                            <label>
+
+                                Work (minutes)
+
+                            </label>
 
                             <input
                                 id="workMinutes"
                                 type="number"
+                                min="1"
                                 value="25">
 
-                        </label>
+                        </div>
 
-                        <label>
+                        <div class="setting">
 
-                            Short Break
+                            <label>
+
+                                Short Break
+
+                            </label>
 
                             <input
                                 id="shortBreakMinutes"
                                 type="number"
+                                min="1"
                                 value="5">
 
-                        </label>
+                        </div>
 
-                        <label>
+                        <div class="setting">
 
-                            Long Break
+                            <label>
+
+                                Long Break
+
+                            </label>
 
                             <input
                                 id="longBreakMinutes"
                                 type="number"
+                                min="1"
                                 value="15">
 
-                        </label>
+                        </div>
 
                     </div>
 
@@ -312,7 +326,8 @@
                     </div>
 
                     <div
-                        id="pomodoroStatus">
+                        id="pomodoroStatus"
+                        class="pomodoro-status">
 
                         Ready to focus
 
@@ -320,22 +335,19 @@
 
                     <div class="button-row">
 
-                        <button
-                            id="startPomodoro">
+                        <button id="startPomodoro">
 
                             Start
 
                         </button>
 
-                        <button
-                            id="pausePomodoro">
+                        <button id="pausePomodoro">
 
                             Pause
 
                         </button>
 
-                        <button
-                            id="resetPomodoro">
+                        <button id="resetPomodoro">
 
                             Reset
 
@@ -347,12 +359,12 @@
 
             </section>
 
-            <!-- ==========================
+            <!-- =========================
                  ALARMS
-            =========================== -->
+            ========================== -->
 
             <section
-                id="alarmsSection"
+                id="alarms"
                 class="clock-section">
 
                 <div class="clock-card">
@@ -378,13 +390,19 @@
 
                     <div class="repeat-days">
 
-                        <label><input type="checkbox" value="Mon">Mon</label>
-                        <label><input type="checkbox" value="Tue">Tue</label>
-                        <label><input type="checkbox" value="Wed">Wed</label>
-                        <label><input type="checkbox" value="Thu">Thu</label>
-                        <label><input type="checkbox" value="Fri">Fri</label>
-                        <label><input type="checkbox" value="Sat">Sat</label>
-                        <label><input type="checkbox" value="Sun">Sun</label>
+                        <label><input class="alarm-day" type="checkbox" value="Mon"> Mon</label>
+
+                        <label><input class="alarm-day" type="checkbox" value="Tue"> Tue</label>
+
+                        <label><input class="alarm-day" type="checkbox" value="Wed"> Wed</label>
+
+                        <label><input class="alarm-day" type="checkbox" value="Thu"> Thu</label>
+
+                        <label><input class="alarm-day" type="checkbox" value="Fri"> Fri</label>
+
+                        <label><input class="alarm-day" type="checkbox" value="Sat"> Sat</label>
+
+                        <label><input class="alarm-day" type="checkbox" value="Sun"> Sun</label>
 
                     </div>
 
@@ -408,8 +426,11 @@
 
     </main>
 
-    <script type="module"
-        src="clock.js"></script>
+    <script
+        type="module"
+        src="clock.js">
+
+    </script>
 
 </body>
 
