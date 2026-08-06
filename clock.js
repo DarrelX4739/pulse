@@ -1,243 +1,210 @@
 import { auth, db } from "./firebase.js";
 
 import {
+    signOut,
+    onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+import {
     doc,
     getDoc,
     setDoc
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
+/* ==========================================
+   LOAD SIDEBAR
+========================================== */
 
-// =====================================
-// TAB SWITCHING
-// =====================================
+async function loadSidebar() {
+
+    const sidebar = document.getElementById("sidebar");
+
+    if (!sidebar) return;
+
+    const response = await fetch("sidebar.html");
+
+    sidebar.innerHTML = await response.text();
+
+    const currentPage = location.pathname.split("/").pop();
+
+    document.querySelectorAll(".nav-link").forEach(link => {
+
+        if (link.getAttribute("href") === currentPage) {
+
+            link.classList.add("active");
+
+        }
+
+    });
+
+    const themeButton = document.getElementById("themeToggle");
+
+    if (themeButton) {
+
+        themeButton.addEventListener("click", () => {
+
+            document.body.classList.toggle("light");
+
+            localStorage.setItem(
+                "theme",
+                document.body.classList.contains("light")
+                    ? "light"
+                    : "dark"
+            );
+
+        });
+
+    }
+
+}
+
+loadSidebar();
+
+/* ==========================================
+   RESTORE THEME
+========================================== */
+
+if (localStorage.getItem("theme") === "light") {
+
+    document.body.classList.add("light");
+
+}
+
+/* ==========================================
+   LOGOUT
+========================================== */
+
+document.getElementById("logoutBtn")?.addEventListener("click", async () => {
+
+    await signOut(auth);
+
+    window.location.href = "index.html";
+
+});
+
+/* ==========================================
+   LIVE CLOCK
+========================================== */
+
+const liveClock = document.getElementById("liveClock");
+
+const liveDate = document.getElementById("liveDate");
+
+function updateClock() {
+
+    const now = new Date();
+
+    liveClock.textContent = now.toLocaleTimeString([], {
+
+        hour: "2-digit",
+
+        minute: "2-digit",
+
+        second: "2-digit"
+
+    });
+
+    liveDate.textContent = now.toLocaleDateString([], {
+
+        weekday: "long",
+
+        year: "numeric",
+
+        month: "long",
+
+        day: "numeric"
+
+    });
+
+}
+
+updateClock();
+
+setInterval(updateClock, 1000);
+
+/* ==========================================
+   TAB SWITCHING
+========================================== */
 
 const tabs = document.querySelectorAll(".clock-tab");
-const panels = document.querySelectorAll(".clock-panel");
+
+const sections = document.querySelectorAll(".clock-section");
 
 tabs.forEach(tab => {
 
     tab.addEventListener("click", () => {
 
         tabs.forEach(t => t.classList.remove("active"));
-        panels.forEach(p => p.classList.remove("active"));
+
+        sections.forEach(section => section.classList.remove("active"));
 
         tab.classList.add("active");
 
         document
-            .getElementById(tab.dataset.target)
+            .getElementById(tab.dataset.tab)
             .classList.add("active");
 
     });
 
 });
 
+/* ==========================================
+   GLOBAL VARIABLES
+========================================== */
 
-// =====================================
-// LIVE CLOCK
-// =====================================
+let alarms = [];
 
-const clockDisplay =
-    document.getElementById("clockDisplay");
-
-const clockDate =
-    document.getElementById("clockDate");
-
-function updateClock(){
-
-    if(!clockDisplay) return;
-
-    const now = new Date();
-
-    clockDisplay.textContent =
-        now.toLocaleTimeString([],{
-
-            hour:"2-digit",
-            minute:"2-digit",
-            second:"2-digit"
-
-        });
-
-    clockDate.textContent =
-        now.toLocaleDateString([],{
-
-            weekday:"long",
-            day:"numeric",
-            month:"long",
-            year:"numeric"
-
-        });
-
-}
-
-updateClock();
-
-setInterval(updateClock,1000);
-
-
-// =====================================
-// STOPWATCH
-// =====================================
-
-let stopwatchTime = 0;
-
-let stopwatchRunning = false;
+let timerInterval = null;
 
 let stopwatchInterval = null;
 
-const stopwatchDisplay =
-    document.getElementById("stopwatchDisplay");
+let pomodoroInterval = null;
 
-const laps =
-    document.getElementById("laps");
+let stopwatchStart = 0;
 
+let elapsed = 0;
 
-function formatMS(ms){
+/* ==========================================
+   TIMER
+========================================== */
 
-    const minutes =
-        Math.floor(ms/60000);
+let timerRemaining = 0;
 
-    const seconds =
-        Math.floor((ms%60000)/1000);
+const timerDisplay = document.getElementById("timerDisplay");
 
-    const millis =
-        Math.floor((ms%1000)/10);
+function updateTimerDisplay() {
 
-    return `${String(minutes).padStart(2,"0")}:${String(seconds).padStart(2,"0")}.${String(millis).padStart(2,"0")}`;
+    const hours = Math.floor(timerRemaining / 3600);
+    const minutes = Math.floor((timerRemaining % 3600) / 60);
+    const seconds = timerRemaining % 60;
 
-}
-
-function updateStopwatch(){
-
-    stopwatchDisplay.textContent =
-        formatMS(stopwatchTime);
+    timerDisplay.textContent =
+        `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
 
 }
 
-document
-.getElementById("swStart")
-?.addEventListener("click",()=>{
+document.getElementById("startTimer").addEventListener("click", () => {
 
-    if(stopwatchRunning) return;
+    if (timerInterval) return;
 
-    stopwatchRunning=true;
+    if (timerRemaining === 0) {
 
-    const start =
-        Date.now()-stopwatchTime;
+        timerRemaining =
+            (Number(document.getElementById("timerHours").value) || 0) * 3600 +
+            (Number(document.getElementById("timerMinutes").value) || 0) * 60 +
+            (Number(document.getElementById("timerSeconds").value) || 0);
 
-    stopwatchInterval=setInterval(()=>{
+    }
 
-        stopwatchTime=
-            Date.now()-start;
+    updateTimerDisplay();
 
-        updateStopwatch();
+    timerInterval = setInterval(() => {
 
-    },10);
-
-});
-
-
-document
-.getElementById("swPause")
-?.addEventListener("click",()=>{
-
-    stopwatchRunning=false;
-
-    clearInterval(stopwatchInterval);
-
-});
-
-
-document
-.getElementById("swReset")
-?.addEventListener("click",()=>{
-
-    stopwatchRunning=false;
-
-    clearInterval(stopwatchInterval);
-
-    stopwatchTime=0;
-
-    laps.innerHTML="";
-
-    updateStopwatch();
-
-});
-
-
-document
-.getElementById("swLap")
-?.addEventListener("click",()=>{
-
-    if(stopwatchTime===0) return;
-
-    const lap=document.createElement("div");
-
-    lap.className="lap";
-
-    lap.innerHTML=`
-
-        <span>Lap ${laps.children.length+1}</span>
-
-        <span>${formatMS(stopwatchTime)}</span>
-
-    `;
-
-    laps.prepend(lap);
-
-});
-
-updateStopwatch();
-
-
-// =====================================
-// COUNTDOWN TIMER
-// =====================================
-
-let timerSeconds=0;
-
-let timerInterval;
-
-const timerDisplay =
-    document.getElementById("timerDisplay");
-
-function drawTimer(){
-
-    const m =
-        Math.floor(timerSeconds/60);
-
-    const s =
-        timerSeconds%60;
-
-    timerDisplay.textContent=
-
-        `${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
-
-}
-
-drawTimer();
-
-document
-.getElementById("timerStart")
-?.addEventListener("click",()=>{
-
-    const mins =
-        Number(document.getElementById("timerMinutes").value)||0;
-
-    const secs =
-        Number(document.getElementById("timerSeconds").value)||0;
-
-    timerSeconds =
-        mins*60+secs;
-
-    drawTimer();
-
-    clearInterval(timerInterval);
-
-    timerInterval=setInterval(()=>{
-
-        if(timerSeconds<=0){
+        if (timerRemaining <= 0) {
 
             clearInterval(timerInterval);
+
+            timerInterval = null;
 
             alert("Timer finished!");
 
@@ -245,26 +212,115 @@ document
 
         }
 
-        timerSeconds--;
+        timerRemaining--;
 
-        drawTimer();
+        updateTimerDisplay();
 
-    },1000);
+    }, 1000);
 
 });
 
-// =====================================
-// POMODORO
-// =====================================
+document.getElementById("pauseTimer").addEventListener("click", () => {
 
-let pomodoroInterval;
+    clearInterval(timerInterval);
+
+    timerInterval = null;
+
+});
+
+document.getElementById("resetTimer").addEventListener("click", () => {
+
+    clearInterval(timerInterval);
+
+    timerInterval = null;
+
+    timerRemaining = 0;
+
+    updateTimerDisplay();
+
+});
+
+updateTimerDisplay();
+
+/* ==========================================
+   STOPWATCH
+========================================== */
+
+const stopwatchDisplay = document.getElementById("stopwatchDisplay");
+const lapContainer = document.getElementById("lapContainer");
+
+function updateStopwatch() {
+
+    const total = elapsed;
+
+    const minutes = Math.floor(total / 60000);
+
+    const seconds = Math.floor((total % 60000) / 1000);
+
+    const milliseconds = total % 1000;
+
+    stopwatchDisplay.textContent =
+        `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}.${String(milliseconds).padStart(3, "0")}`;
+
+}
+
+document.getElementById("startStopwatch").addEventListener("click", () => {
+
+    if (stopwatchInterval) return;
+
+    stopwatchStart = Date.now() - elapsed;
+
+    stopwatchInterval = setInterval(() => {
+
+        elapsed = Date.now() - stopwatchStart;
+
+        updateStopwatch();
+
+    }, 10);
+
+});
+
+document.getElementById("resetStopwatch").addEventListener("click", () => {
+
+    clearInterval(stopwatchInterval);
+
+    stopwatchInterval = null;
+
+    elapsed = 0;
+
+    lapContainer.innerHTML = "";
+
+    updateStopwatch();
+
+});
+
+document.getElementById("lapStopwatch").addEventListener("click", () => {
+
+    if (elapsed === 0) return;
+
+    const lap = document.createElement("div");
+
+    lap.className = "lap";
+
+    lap.innerHTML = `
+        <strong>Lap ${lapContainer.children.length + 1}</strong>
+        <span>${stopwatchDisplay.textContent}</span>
+    `;
+
+    lapContainer.prepend(lap);
+
+});
+
+updateStopwatch();
+
+/* ==========================================
+   POMODORO
+========================================== */
+
+const pomodoroDisplay = document.getElementById("pomodoroDisplay");
+const pomodoroStatus = document.getElementById("pomodoroStatus");
 
 let pomodoroSeconds = 0;
-
-let onBreak = false;
-
-const pomodoroDisplay =
-    document.getElementById("pomodoroDisplay");
 
 function drawPomodoro() {
 
@@ -277,19 +333,14 @@ function drawPomodoro() {
 
 }
 
-document.getElementById("pomodoroStart")?.addEventListener("click", () => {
+document.getElementById("startPomodoro").addEventListener("click", () => {
 
     clearInterval(pomodoroInterval);
 
-    const work =
-        Number(document.getElementById("workMinutes").value) || 25;
+    pomodoroSeconds =
+        Number(document.getElementById("workMinutes").value) * 60;
 
-    const brk =
-        Number(document.getElementById("breakMinutes").value) || 5;
-
-    onBreak = false;
-
-    pomodoroSeconds = work * 60;
+    pomodoroStatus.textContent = "Focus Time";
 
     drawPomodoro();
 
@@ -301,25 +352,13 @@ document.getElementById("pomodoroStart")?.addEventListener("click", () => {
 
         if (pomodoroSeconds <= 0) {
 
-            if (!onBreak) {
+            clearInterval(pomodoroInterval);
 
-                alert("Work session complete!");
+            pomodoroInterval = null;
 
-                onBreak = true;
+            pomodoroStatus.textContent = "Finished!";
 
-                pomodoroSeconds = brk * 60;
-
-            }
-
-            else {
-
-                alert("Break finished!");
-
-                onBreak = false;
-
-                pomodoroSeconds = work * 60;
-
-            }
+            alert("Pomodoro complete!");
 
         }
 
@@ -327,11 +366,24 @@ document.getElementById("pomodoroStart")?.addEventListener("click", () => {
 
 });
 
-document.getElementById("pomodoroReset")?.addEventListener("click", () => {
+document.getElementById("pausePomodoro").addEventListener("click", () => {
 
     clearInterval(pomodoroInterval);
 
-    pomodoroSeconds = 0;
+    pomodoroInterval = null;
+
+});
+
+document.getElementById("resetPomodoro").addEventListener("click", () => {
+
+    clearInterval(pomodoroInterval);
+
+    pomodoroInterval = null;
+
+    pomodoroSeconds =
+        Number(document.getElementById("workMinutes").value) * 60;
+
+    pomodoroStatus.textContent = "Ready to focus";
 
     drawPomodoro();
 
@@ -339,19 +391,13 @@ document.getElementById("pomodoroReset")?.addEventListener("click", () => {
 
 drawPomodoro();
 
+/* ==========================================
+   ALARMS
+========================================== */
 
-// =====================================
-// ALARMS
-// =====================================
-
-let alarms = [];
-
-const alarmList =
-    document.getElementById("alarmList");
+const alarmList = document.getElementById("alarmList");
 
 function renderAlarms() {
-
-    if (!alarmList) return;
 
     alarmList.innerHTML = "";
 
@@ -362,24 +408,24 @@ function renderAlarms() {
         div.className = "alarm";
 
         div.innerHTML = `
-
             <div>
-
-                <strong>${alarm.time}</strong>
-
-                <br>
-
+                <strong>${alarm.time}</strong><br>
+                <small>${alarm.label}</small><br>
                 <small>${alarm.days.join(", ")}</small>
-
             </div>
 
-            <button onclick="deleteAlarm(${index})">
-
-                Delete
-
-            </button>
-
+            <button data-index="${index}">Delete</button>
         `;
+
+        div.querySelector("button").onclick = async () => {
+
+            alarms.splice(index, 1);
+
+            renderAlarms();
+
+            await saveClock();
+
+        };
 
         alarmList.appendChild(div);
 
@@ -387,155 +433,92 @@ function renderAlarms() {
 
 }
 
-window.deleteAlarm = async function(index) {
+document.getElementById("addAlarm").addEventListener("click", async () => {
 
-    alarms.splice(index, 1);
+    const days = [];
 
-    renderAlarms();
+    document.querySelectorAll(".alarm-day:checked").forEach(day => {
 
-    await saveClockData();
+        days.push(day.value);
 
-};
-
-document.getElementById("addAlarm")?.addEventListener("click", async () => {
-
-    const time =
-        document.getElementById("alarmTime").value;
-
-    if (!time) return;
-
-    const selectedDays = [];
-
-    document
-        .querySelectorAll(".alarm-day:checked")
-        .forEach(day => {
-
-            selectedDays.push(day.value);
-
-        });
+    });
 
     alarms.push({
 
-        time,
+        time: document.getElementById("alarmTime").value,
 
-        days: selectedDays
+        label: document.getElementById("alarmLabel").value || "Alarm",
+
+        days
 
     });
 
     renderAlarms();
 
-    await saveClockData();
+    await saveClock();
 
 });
 
+/* ==========================================
+   FIRESTORE
+========================================== */
 
-// =====================================
-// CHECK ALARMS
-// =====================================
+async function saveClock() {
 
-setInterval(() => {
+    const user = auth.currentUser;
 
-    const now = new Date();
+    if (!user) return;
 
-    const time =
-        now.toLocaleTimeString([], {
+    await setDoc(doc(db, "clock", user.uid), {
 
-            hour: "2-digit",
+        alarms,
 
-            minute: "2-digit",
+        workMinutes: document.getElementById("workMinutes").value,
 
-            hour12: false
+        shortBreakMinutes: document.getElementById("shortBreakMinutes").value,
 
-        });
-
-    const weekday =
-        ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][now.getDay()];
-
-    alarms.forEach(alarm => {
-
-        if (
-
-            alarm.time === time &&
-
-            alarm.days.includes(weekday)
-
-        ) {
-
-            alert("Alarm!");
-
-        }
+        longBreakMinutes: document.getElementById("longBreakMinutes").value
 
     });
 
-}, 1000);
-
-
-// =====================================
-// FIRESTORE SAVE / LOAD
-// =====================================
-
-async function saveClockData() {
-
-    const user = auth.currentUser;
-
-    if (!user) return;
-
-    await setDoc(
-
-        doc(db, "clock", user.uid),
-
-        {
-
-            alarms,
-
-            workMinutes:
-
-                document.getElementById("workMinutes")?.value || 25,
-
-            breakMinutes:
-
-                document.getElementById("breakMinutes")?.value || 5
-
-        }
-
-    );
-
 }
 
-async function loadClockData() {
+async function loadClock() {
 
     const user = auth.currentUser;
 
     if (!user) return;
 
-    const snapshot =
-        await getDoc(doc(db, "clock", user.uid));
+    const snap = await getDoc(doc(db, "clock", user.uid));
 
-    if (!snapshot.exists()) return;
+    if (!snap.exists()) return;
 
-    const data = snapshot.data();
+    const data = snap.data();
 
     alarms = data.alarms || [];
 
     renderAlarms();
 
-    if (document.getElementById("workMinutes"))
+    if (data.workMinutes)
+        document.getElementById("workMinutes").value = data.workMinutes;
 
-        document.getElementById("workMinutes").value =
-            data.workMinutes ?? 25;
+    if (data.shortBreakMinutes)
+        document.getElementById("shortBreakMinutes").value = data.shortBreakMinutes;
 
-    if (document.getElementById("breakMinutes"))
-
-        document.getElementById("breakMinutes").value =
-            data.breakMinutes ?? 5;
+    if (data.longBreakMinutes)
+        document.getElementById("longBreakMinutes").value = data.longBreakMinutes;
 
 }
 
-auth.onAuthStateChanged?.((user) => {
+onAuthStateChanged(auth, user => {
 
     if (user) {
 
-        loadClockData();
+        loadClock();
+
+    } else {
+
+        window.location.href = "index.html";
 
     }
 
