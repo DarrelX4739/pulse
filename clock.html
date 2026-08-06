@@ -11,47 +11,35 @@
 
     <link rel="stylesheet" href="style.css">
 
-    <link rel="icon" type="image/png" href="ChatGPT Image Aug 4, 2026, 08_29_26 PM.png">
-
     <link rel="stylesheet" href="clock.css">
+
+    <link rel="icon" type="image/png" href="ChatGPT Image Aug 4, 2026, 08_29_26 PM.png">
 
 </head>
 
-<main class="main-content">
+<body>
 
-    <div class="dashboard-card">
+    <div id="sidebar"></div>
 
-        <div class="top-bar">
+    <main class="main-content">
 
-            <h1>Clock</h1>
+        <div class="dashboard-card">
 
-            <button id="logoutBtn">
+            <div class="top-bar">
 
-                Log Out
+                <h1>Clock</h1>
 
-            </button>
+                <button id="logoutBtn">
 
-        </div>
+                    Log Out
 
-        <div class="clock-card">
+                </button>
 
-            <div class="analog-clock">
+            </div>
+
+            <div class="clock-card">
 
                 <div class="clock-face">
-
-                    <span class="number n12">12</span>
-                    <span class="number n3">3</span>
-                    <span class="number n6">6</span>
-                    <span class="number n9">9</span>
-
-                    <div class="tick t1"></div>
-                    <div class="tick t2"></div>
-                    <div class="tick t3"></div>
-                    <div class="tick t4"></div>
-                    <div class="tick t5"></div>
-                    <div class="tick t6"></div>
-                    <div class="tick t7"></div>
-                    <div class="tick t8"></div>
 
                     <div id="hourHand" class="hand hour-hand"></div>
 
@@ -63,30 +51,32 @@
 
                 </div>
 
-            </div>
+                <div class="clock-info">
 
-            <div class="clock-info">
+                    <div id="digitalClock">
 
-                <div id="digitalClock">
+                        00:00:00
 
-                    00:00:00
+                    </div>
+
+                    <div id="clockDate">
+
+                        Loading...
+
+                    </div>
 
                 </div>
-
-                <div id="clockDate">
-
-                    Loading...
-
-                </div>
-
-                
 
             </div>
 
         </div>
 
-    </div>
+    </main>
 
-</main>
+    <script type="module" src="app.js"></script>
 
-<script type="module" src="clock.js"></script>
+    <script type="module" src="clock.js"></script>
+
+</body>
+
+</html>
