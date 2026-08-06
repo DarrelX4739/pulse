@@ -269,3 +269,166 @@ body.light .centre-dot {
     opacity: .8;
 
 }
+
+
+/* ==========================================
+   HOVER EFFECT
+========================================== */
+
+.clock-face {
+
+    transition: transform .25s ease;
+
+}
+
+.clock-face:hover {
+
+    transform: scale(1.02);
+
+}
+
+
+/* ==========================================
+   CLOCK GLOW
+========================================== */
+
+.clock-face::after {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 14px;
+
+    border-radius: 50%;
+
+    pointer-events: none;
+
+    border: 1px solid rgba(255,255,255,.04);
+
+}
+
+body.light .clock-face::after {
+
+    border: 1px solid rgba(0,0,0,.05);
+
+}
+
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media (max-width:900px){
+
+    .clock-card{
+
+        padding:40px 25px;
+
+    }
+
+    .clock-face{
+
+        width:340px;
+
+        height:340px;
+
+    }
+
+    .clock-tick{
+
+        transform-origin:center -140px;
+
+    }
+
+    .hour-hand{
+
+        height:78px;
+
+        margin-top:-78px;
+
+    }
+
+    .minute-hand{
+
+        height:112px;
+
+        margin-top:-112px;
+
+    }
+
+    .second-hand{
+
+        height:136px;
+
+        margin-top:-136px;
+
+    }
+
+    #digitalClock{
+
+        font-size:2.5rem;
+
+    }
+
+}
+
+@media (max-width:600px){
+
+    .clock-face{
+
+        width:260px;
+
+        height:260px;
+
+    }
+
+    .clock-tick{
+
+        transform-origin:center -100px;
+
+    }
+
+    .clock-number{
+
+        font-size:1.1rem;
+
+    }
+
+    .hour-hand{
+
+        height:60px;
+
+        margin-top:-60px;
+
+    }
+
+    .minute-hand{
+
+        height:86px;
+
+        margin-top:-86px;
+
+    }
+
+    .second-hand{
+
+        height:104px;
+
+        margin-top:-104px;
+
+    }
+
+    #digitalClock{
+
+        font-size:2rem;
+
+    }
+
+    #clockDate{
+
+        font-size:1rem;
+
+    }
+
+}
