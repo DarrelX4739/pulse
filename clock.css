@@ -1,1 +1,343 @@
+/* ==========================================
+   CLOCK PAGE
+========================================== */
 
+.clock-card {
+
+    background: #1d1d1d;
+
+    border: 1px solid #2a2a2a;
+
+    border-radius: 22px;
+
+    padding: 50px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 40px;
+
+}
+
+body.light .clock-card {
+
+    background: white;
+
+    border: 1px solid #d1d5db;
+
+}
+
+
+/* ==========================================
+   ANALOG CLOCK
+========================================== */
+
+.analog-clock {
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+}
+
+.clock-face {
+
+    position: relative;
+
+    width: 360px;
+
+    height: 360px;
+
+    border-radius: 50%;
+
+    background: #151515;
+
+    border: 8px solid #dc2626;
+
+    box-shadow:
+        0 0 30px rgba(220,38,38,.18),
+        inset 0 0 20px rgba(0,0,0,.45);
+
+}
+
+body.light .clock-face {
+
+    background: #ffffff;
+
+    border-color: #2563eb;
+
+    box-shadow:
+        0 0 30px rgba(37,99,235,.15),
+        inset 0 0 20px rgba(0,0,0,.05);
+
+}
+
+
+/* ==========================================
+   NUMBERS
+========================================== */
+
+.number {
+
+    position: absolute;
+
+    font-size: 1.7rem;
+
+    font-weight: bold;
+
+}
+
+.n12 {
+
+    top: 18px;
+
+    left: 50%;
+
+    transform: translateX(-50%);
+
+}
+
+.n3 {
+
+    right: 20px;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+}
+
+.n6 {
+
+    bottom: 18px;
+
+    left: 50%;
+
+    transform: translateX(-50%);
+
+}
+
+.n9 {
+
+    left: 20px;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+}
+
+
+/* ==========================================
+   TICKS
+========================================== */
+
+.tick {
+
+    position: absolute;
+
+    width: 4px;
+
+    height: 18px;
+
+    background: #999;
+
+    left: 50%;
+
+    top: 50%;
+
+    transform-origin: center -155px;
+
+}
+
+.t1 { transform: translate(-50%,-50%) rotate(30deg); }
+.t2 { transform: translate(-50%,-50%) rotate(60deg); }
+.t3 { transform: translate(-50%,-50%) rotate(120deg); }
+.t4 { transform: translate(-50%,-50%) rotate(150deg); }
+.t5 { transform: translate(-50%,-50%) rotate(210deg); }
+.t6 { transform: translate(-50%,-50%) rotate(240deg); }
+.t7 { transform: translate(-50%,-50%) rotate(300deg); }
+.t8 { transform: translate(-50%,-50%) rotate(330deg); }
+
+
+/* ==========================================
+   HANDS
+========================================== */
+
+.hand {
+
+    position: absolute;
+
+    left: 50%;
+
+    bottom: 50%;
+
+    transform-origin: bottom center;
+
+    border-radius: 999px;
+
+}
+
+.hour-hand {
+
+    width: 8px;
+
+    height: 90px;
+
+    background: white;
+
+    margin-left: -4px;
+
+}
+
+.minute-hand {
+
+    width: 6px;
+
+    height: 125px;
+
+    background: #d1d5db;
+
+    margin-left: -3px;
+
+}
+
+.second-hand {
+
+    width: 2px;
+
+    height: 145px;
+
+    background: #ef4444;
+
+    margin-left: -1px;
+
+}
+
+body.light .hour-hand {
+
+    background: #111827;
+
+}
+
+body.light .minute-hand {
+
+    background: #4b5563;
+
+}
+
+
+/* ==========================================
+   CENTRE
+========================================== */
+
+.centre-dot {
+
+    position: absolute;
+
+    width: 18px;
+
+    height: 18px;
+
+    border-radius: 50%;
+
+    background: #dc2626;
+
+    left: 50%;
+
+    top: 50%;
+
+    transform: translate(-50%, -50%);
+
+}
+
+body.light .centre-dot {
+
+    background: #2563eb;
+
+}
+
+
+/* ==========================================
+   DIGITAL CLOCK
+========================================== */
+
+.clock-info {
+
+    text-align: center;
+
+}
+
+#digitalClock {
+
+    font-size: 3.2rem;
+
+    font-weight: bold;
+
+    letter-spacing: 2px;
+
+    margin-bottom: 15px;
+
+}
+
+#clockDate {
+
+    font-size: 1.15rem;
+
+    opacity: .8;
+
+}
+
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media (max-width: 800px) {
+
+    .clock-card {
+
+        padding: 35px;
+
+    }
+
+    .clock-face {
+
+        width: 280px;
+
+        height: 280px;
+
+    }
+
+    .hour-hand {
+
+        height: 70px;
+
+    }
+
+    .minute-hand {
+
+        height: 98px;
+
+    }
+
+    .second-hand {
+
+        height: 112px;
+
+    }
+
+    #digitalClock {
+
+        font-size: 2.3rem;
+
+    }
+
+}
